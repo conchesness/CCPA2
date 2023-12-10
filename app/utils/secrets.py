@@ -2,7 +2,7 @@ import os
 
 def getSecrets():
     secrets = {
-        'MONGO_HOST':f"{os.environ.get('mongodb_host')}/ccpa?retryWrites=true&w=majority",
+        'MONGO_HOST':f"{os.environ.get('mongodb_host')}/?retryWrites=true&w=majority",
         'MONGO_DB_NAME':'ccpa2',
         'GOOGLE_CLIENT_ID': os.environ.get('ccpa2_google_client_id'),
         'GOOGLE_CLIENT_SECRET':os.environ.get('ccpa2_google_client_secret'),
