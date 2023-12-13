@@ -18,7 +18,7 @@ def spotifyauth():
     auth_headers = {
         "client_id": secrets['SPOTIFY_CLIENT_ID'],
         "response_type": "code",
-        "redirect_uri": "https://127.0.0.1:5000/spotifycallback",
+        "redirect_uri": "https:ccpa-2.vercel.app/spotifycallback",
         "scope": "user-library-read"
     }
 
@@ -39,7 +39,7 @@ def spotifycallback():
     token_data = {
         "grant_type": "authorization_code",
         "code": code,
-        "redirect_uri": "https://127.0.0.1:5000/spotifycallback"
+        "redirect_uri": "https://ccpa-2.vercel.app/spotifycallback"
     }
 
     r = requests.post("https://accounts.spotify.com/api/token", data=token_data, headers=token_headers)
@@ -120,7 +120,7 @@ def playlist():
         try:
             session['spotifytoken']
         except:
-            return redirect(url_for('spotify'))
+            return redirect(url_for('spotifyauth'))
 
         user_headers = {
             "Authorization": "Bearer " + session['spotifytoken'],
