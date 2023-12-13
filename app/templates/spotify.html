@@ -1,0 +1,106 @@
+<!-- This is a blank template.  You can copy this to make a new template page. -->
+
+{% extends 'base.html' %}
+
+{% block body %}
+
+
+
+    <form method=post>
+        {{ form.hidden_tag() }}
+        
+        Search Spotify: <br> {{ form.track(size=64) }} <br>
+        {% if form.track.errors %}
+            {% for error in form.track.errors %}
+                <span style="color: red;">[{{ error }}]</span> <br>
+            {% endfor %}
+        {% endif %}
+
+        {{form.submit()}}
+    </form>
+    
+<div class="row">
+    <div class="col">
+        <h1>CCPA Playlist</h1>
+        <table class="table">
+            <tr><th>Track</th><th>Artist</th><th>Users</th></tr>
+            {% for track in playlist %}
+            {#<tr><td colspan="3">{{track.track_dict['album']}}</td></tr>#}
+        
+            <tr>
+                <td>
+                    <a href="{{track.track_dict['album']['external_urls']['spotify']}}" target="_blank">
+                    {{track.track_dict['name']}}
+                    </a>
+                </td>
+                <td>
+                    {% for artist in track.track_dict['album']['artists'] %}
+                        <a href="{{artist['external_urls']['spotify']}}" target="_blank">
+                            {{artist['name']}} <br>
+                        </a>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% if current_user in track['users'] %}
+                        <a href="/unvotetrack/{{track.track_dict['id']}}"><img width="20" src="/static/delete.png"></a>
+                    {% endif %}
+                    ({{track.num_users}}) 
+                    {% for user in track.users %}
+                        {{user.fname}} {{user.lname}},
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colspan="2">
+                    <audio controls>
+                        <source src="{{track.track_dict['preview_url']}}" type="audio/mpeg">
+                    </audio> 
+                </td>
+            </tr>
+            {% endfor %}
+        
+        </table>
+    </div>
+    <div class="col">
+        {% if track_info and track_info['tracks'] %}
+            {% for album in track_info['tracks']['items'] %}
+                <a href="/addtoplaylist/{{album['id']}}">
+                    <img width="20" src="/static/new.png">
+                </a> <br>
+                {% for artist in album['artists'] %}
+                    <b>Artist: </b>
+                    <a href="{{artist['external_urls']['spotify']}}" target="_blank">
+                        {{artist['name']}} <br>
+                    </a>
+                {% endfor %}
+                <b>Album: </b>
+                <a href="{{album['album']['external_urls']['spotify']}}" target="_blank">
+                    {{album['album']['name']}} <br>
+                </a>
+                    <b>Track: </b></b>
+                <a href="{{album['external_urls']['spotify']}}" target="_blank">
+                    {{album['name']}} <br>
+                </a>
+                
+                <audio controls>
+                    <source src="{{album['preview_url']}}" type="audio/mpeg">
+                </audio> 
+                {#
+                {% for item in album %}
+        
+                    <b>{{item}}:</b> {{album[item]}} <br>
+        
+                {% endfor %}
+                #}
+                <hr>
+            {% endfor %}
+        {% endif %}
+        </div>
+    
+</div>
+
+
+
+
+{% endblock %}

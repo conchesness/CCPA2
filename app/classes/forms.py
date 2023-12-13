@@ -7,6 +7,11 @@ import mongoengine.errors
 from wtforms.validators import URL, Email, DataRequired
 from wtforms import StringField, SubmitField, TextAreaField, IntegerField, SelectField, FileField, BooleanField, URLField
 
+class SpotifySearchForm(FlaskForm):
+    track = StringField()
+    artist = StringField()
+    submit = SubmitField("Search")
+
 class WCloudForm(FlaskForm):
     text = TextAreaField()
     stopwords = TextAreaField()

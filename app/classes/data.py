@@ -13,7 +13,8 @@ from setuptools import SetuptoolsDeprecationWarning
 from app import app
 from flask import flash, redirect
 from flask_login import UserMixin, current_user
-from mongoengine import Document, ListField, FileField, EmailField, StringField, IntField, ReferenceField, DateTimeField, BooleanField, FloatField, CASCADE
+from mongoengine import Document, ListField, FileField, EmailField, StringField, IntField, DictField
+from mongoengine import ReferenceField, DateTimeField, BooleanField, FloatField, CASCADE
 import datetime as dt
 #import jwt
 from time import time
@@ -70,6 +71,16 @@ def require_role(role):
                 return func(*args, **kwargs)
         return wrapped_function
     return decorator
+
+class Playlist(Document):
+    track_id = StringField(unique = True)
+    track_dict = DictField(required = True)
+    users = ListField(ReferenceField("User"))
+    num_users = IntField()
+
+    meta = {
+        'ordering': ['num_users']
+    }
 
 class Blog(Document):
     author = ReferenceField('User',reverse_delete_rule=CASCADE) 

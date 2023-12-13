@@ -7,7 +7,9 @@ def getSecrets():
         'GOOGLE_CLIENT_ID': os.environ.get('ccpa2_google_client_id'),
         'GOOGLE_CLIENT_SECRET':os.environ.get('ccpa2_google_client_secret'),
         'GOOGLE_DISCOVERY_URL':"https://accounts.google.com/.well-known/openid-configuration",
-        'MY_EMAIL_ADDRESS':os.environ.get('my_email_address')
+        'MY_EMAIL_ADDRESS':os.environ.get('my_email_address'),
+        'SPOTIFY_CLIENT_ID':os.environ.get('spotify_client_id'),
+        'SPOTIFY_CLIENT_SECRET':os.environ.get('spotify_client_secret'),
         }
     return secrets
 
