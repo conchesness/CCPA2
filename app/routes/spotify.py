@@ -117,6 +117,11 @@ def playlist():
 
         track = form.track.data
 
+        try:
+            session['spotifytoken']
+        except:
+            return redirect(url_for('spotify'))
+
         user_headers = {
             "Authorization": "Bearer " + session['spotifytoken'],
             "Content-Type": "application/json"
