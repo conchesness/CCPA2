@@ -18,7 +18,7 @@ def spotifyauth():
     auth_headers = {
         "client_id": secrets['SPOTIFY_CLIENT_ID'],
         "response_type": "code",
-        "redirect_uri": "https:ccpa-2.vercel.app/spotifycallback",
+        "redirect_uri": "https://ccpa-2.vercel.app/spotifycallback",
         "scope": "user-library-read"
     }
 
