@@ -116,9 +116,11 @@ def callback():
     # 'hd': 'ousd.org'
     # }
 
-    if userinfo_response.json().get("hd") != "ousd.org":
-        flash("You must have an ousd.org email account to access this site.")
-        return "You must have an ousd.org email account to access this site.", 400
+    emailDomain = userinfo_response.json().get("hd")
+
+    if emailDomain != "ousd.org":
+        flash("You must have an ousd.org email accountselect_acc to access this site.")
+        return f"You must have an ousd.org email account to access this site. Your's is {emailDomain}", 400
 
     # We want to make sure their email is verified.
     # The user authenticated with Google, authorized our
