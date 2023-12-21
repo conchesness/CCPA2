@@ -34,10 +34,10 @@ def wordcloud():
         plt.axis("off")
 
         data = io.BytesIO()
-        plt.savefig(data, format='png')
+        plt.savefig(data, format='jpeg')
         data.seek(0)
         im = Image.open(data)
-        im.save(data, "PNG")
+        im.save(data, "jpeg")
         encoded_img_data = base64.b64encode(data.getvalue())
 
         return render_template("wordcloud.html", img_data=encoded_img_data.decode('utf-8'),form=form, words=words)
