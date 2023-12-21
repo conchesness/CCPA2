@@ -1,11 +1,9 @@
-<!-- This is a blank template.  You can copy this to make a new template page. -->
-
 {% extends 'base.html' %}
 
 {% block body %}
     
-<div class="row">
-    <div class="col ms-2">
+<div class="row mx-2">
+    <div class="col">
         <h1>CCPA Playlist</h1>
             {% for track in playlist %}
             <div class="row ms-4">
@@ -24,7 +22,13 @@
                                 {{artist['name']}} <br>
                             </a>
                         {% endfor %}
-                    
+
+                        {% if not current_user in track.users %}
+                            <a href="/addselftotrack/{{track.id}}">/addselftotrack/{{track['id']}}
+                                <img width="20" src="/static/new.png">
+                            </a>     
+                        {% endif %}
+
                         <b>Users: </b>
                         {% if current_user in track['users'] %}
                             <a href="/unvotetrack/{{track.track_dict['id']}}"><img width="20" src="/static/delete.png"></a>
@@ -92,7 +96,6 @@
             {% endfor %}
         {% endif %}
         </div>
-    
 </div>
 
 

@@ -56,9 +56,30 @@ def spotifycallback():
 
     return redirect(url_for('playlist'))
 
-@app.route('/addtoplaylist/<id>')
+
+@app.route('/addselftotrack/<track_id>')
 @login_required
-def addtoplaylist(id):
+def addselftotrack(track_id):
+
+    track = Playlist.objects.get(pk=track_id)
+
+    if current_user.id in track.users:
+        flash("you are already on this track.")
+        return redirect(url_for('playlist'))
+
+    numCollabTracks = Playlist.objects(users__contains = current_user.id, num_users__gt=1)
+    if len(numCollabTracks) >= 5:
+        flash("You are on 5 collab tracks. Remove yourself from one if you want to add yourself to another.")
+        return redirect(url_for('playlist'))
+
+    track.users.append(current_user).save()
+
+    return redirect(url_for('playlist'))
+
+
+@app.route('/addtoplaylist/<spotifyid>')
+@login_required
+def addtoplaylist(spotifyid):
 
     numSoloTracks = Playlist.objects(users__contains = current_user.id, num_users=1)
     if len(numSoloTracks) >= 2:
@@ -71,7 +92,7 @@ def addtoplaylist(id):
     }  
 
     track_info = requests.get(
-        'https://api.spotify.com/v1/tracks/'+id,
+        'https://api.spotify.com/v1/tracks/'+spotifyid,
         headers=user_headers,
         params = {
             'type':'track'
@@ -84,7 +105,7 @@ def addtoplaylist(id):
     track_info = track_info.json()
 
     newTrack = Playlist(
-        track_id = id,
+        track_id = spotifyid,
         track_dict = track_info,
         num_users = 1
     )
@@ -92,14 +113,20 @@ def addtoplaylist(id):
     try:
         newTrack.save()
     except NotUniqueError:
-        editTrack = Playlist.objects.get(track_id=id)
+        editTrack = Playlist.objects.get(track_id=spotifyid)
         if not current_user in editTrack.users:
+
+            numCollabTracks = Playlist.objects(users__contains = current_user.id, num_users__gt=1)
+            if len(numCollabTracks) >= 5:
+                flash("You are on 5 collab tracks. Remove yourself from one if you want to add yourself to another.")
+                return redirect(url_for('playlist'))
+
             flash('Adding you to a track already in the playlist.')
             editTrack.users.append(current_user.id)
             editTrack.users.num_users = len(editTrack.users)
             editTrack.save()
         else:
-            flash("You already added that track to the list")
+            flash("You are already on that track.")
 
     return redirect(url_for('playlist'))
 
