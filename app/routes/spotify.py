@@ -10,15 +10,7 @@ from app.classes.forms import SpotifySearchForm
 from app.classes.data import Playlist
 from mongoengine.errors import NotUniqueError
 
-def spotify_redir_uri():
-    if request.host_url == 'https://127.0.0.1:5000/':
-        flash('local')
-        return "https://127.0.0.1:5000/spotifycallback"
-    elif request.host_url == "https://ccpa-2.vercel.app/":
-        return "https://ccpa-2.vercel.app/spotifycallback"
-
 @app.route('/spotify')
-
 @login_required
 def spotifyauth():
     secrets = getSecrets()
@@ -26,9 +18,11 @@ def spotifyauth():
     auth_headers = {
         "client_id": secrets['SPOTIFY_CLIENT_ID'],
         "response_type": "code",
-        "redirect_uri": spotify_redir_uri(),
+        "redirect_uri": f"{request.host_url}spotifycallback",
         "scope": "user-library-read"
     }
+
+    f"{request.host_url}spotifycallback"
 
     return redirect("https://accounts.spotify.com/authorize?" + urlencode(auth_headers))
 
@@ -47,8 +41,9 @@ def spotifycallback():
     token_data = {
         "grant_type": "authorization_code",
         "code": code,
-        "redirect_uri": spotify_redir_uri()
+        "redirect_uri": f"{request.host_url}spotifycallback"
     }
+    flash(f"{request.host_url}spotifycallback")
 
     r = requests.post("https://accounts.spotify.com/api/token", data=token_data, headers=token_headers)
 
