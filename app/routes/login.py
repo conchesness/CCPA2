@@ -35,7 +35,7 @@ def before_request():
 # https://flask-login.readthedocs.io/en/latest/#flask_login.LoginManager.unauthorized_handler
 @login_manager.unauthorized_handler
 def unauthorized():
-    flash("You must be logged in to access that content and you must have an ousd.org email address to login.")
+    #flash("You must be logged in to access that content and you must have an ousd.org email address to login.")
     return redirect(url_for('login'))
 
 # Flask-Login helper to retrieve a user object from our db

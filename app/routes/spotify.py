@@ -10,7 +10,15 @@ from app.classes.forms import SpotifySearchForm
 from app.classes.data import Playlist
 from mongoengine.errors import NotUniqueError
 
+def spotify_redir_uri():
+    if request.host_url == 'https://127.0.0.1:5000/':
+        flash('local')
+        return "https://127.0.0.1:5000/spotifycallback"
+    elif request.host_url == "https://ccpa-2.vercel.app/":
+        return "https://ccpa-2.vercel.app/spotifycallback"
+
 @app.route('/spotify')
+
 @login_required
 def spotifyauth():
     secrets = getSecrets()
@@ -18,7 +26,7 @@ def spotifyauth():
     auth_headers = {
         "client_id": secrets['SPOTIFY_CLIENT_ID'],
         "response_type": "code",
-        "redirect_uri": "https://ccpa-2.vercel.app/spotifycallback",
+        "redirect_uri": spotify_redir_uri(),
         "scope": "user-library-read"
     }
 
@@ -39,7 +47,7 @@ def spotifycallback():
     token_data = {
         "grant_type": "authorization_code",
         "code": code,
-        "redirect_uri": "https://ccpa-2.vercel.app/spotifycallback"
+        "redirect_uri": spotify_redir_uri()
     }
 
     r = requests.post("https://accounts.spotify.com/api/token", data=token_data, headers=token_headers)
@@ -51,41 +59,49 @@ def spotifycallback():
 @app.route('/addtoplaylist/<id>')
 @login_required
 def addtoplaylist(id):
-        user_headers = {
-            "Authorization": "Bearer " + session['spotifytoken'],
-            "Content-Type": "application/json"
-        }  
 
-        track_info = requests.get(
-            'https://api.spotify.com/v1/tracks/'+id,
-            headers=user_headers,
-            params = {'type':'track'}
-            )
-            
-        if str(track_info) == "<Response [401]>":
-            return redirect(url_for('spotifyauth'))
-
-        track_info = track_info.json()
-
-        newTrack = Playlist(
-            track_id = id,
-            track_dict = track_info,
-            num_users = 1
-        )
-        newTrack.users.append(current_user.id)
-        try:
-            newTrack.save()
-        except NotUniqueError:
-            editTrack = Playlist.objects.get(track_id=id)
-            if not current_user in editTrack.users:
-                flash('Adding you to a track already in the playlist.')
-                editTrack.users.append(current_user.id)
-                editTrack.users.num_users = len(editTrack.users)
-                editTrack.save()
-            else:
-                flash("You already added that track to the list")
-
+    numSoloTracks = Playlist.objects(users__contains = current_user.id, num_users=1)
+    if len(numSoloTracks) >= 2:
+        flash("You already have 2 tracks where you are the only user. Delete one or wait til some one votes one of them.")
         return redirect(url_for('playlist'))
+
+    user_headers = {
+        "Authorization": "Bearer " + session['spotifytoken'],
+        "Content-Type": "application/json"
+    }  
+
+    track_info = requests.get(
+        'https://api.spotify.com/v1/tracks/'+id,
+        headers=user_headers,
+        params = {
+            'type':'track'
+            }
+        )
+        
+    if str(track_info) == "<Response [401]>":
+        return redirect(url_for('spotifyauth'))
+
+    track_info = track_info.json()
+
+    newTrack = Playlist(
+        track_id = id,
+        track_dict = track_info,
+        num_users = 1
+    )
+    newTrack.users.append(current_user.id)
+    try:
+        newTrack.save()
+    except NotUniqueError:
+        editTrack = Playlist.objects.get(track_id=id)
+        if not current_user in editTrack.users:
+            flash('Adding you to a track already in the playlist.')
+            editTrack.users.append(current_user.id)
+            editTrack.users.num_users = len(editTrack.users)
+            editTrack.save()
+        else:
+            flash("You already added that track to the list")
+
+    return redirect(url_for('playlist'))
 
 @app.route('/unvotetrack/<track_id>')
 @login_required
