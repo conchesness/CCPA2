@@ -134,3 +134,4 @@ dmypy.json
 #secrets.py
 secretsOLD.py
 .vercel
+local.py

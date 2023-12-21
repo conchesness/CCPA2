@@ -43,7 +43,6 @@ def spotifycallback():
         "code": code,
         "redirect_uri": f"{request.host_url}spotifycallback"
     }
-    flash(f"{request.host_url}spotifycallback")
 
     r = requests.post("https://accounts.spotify.com/api/token", data=token_data, headers=token_headers)
 
