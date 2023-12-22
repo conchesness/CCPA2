@@ -1,8 +1,16 @@
 {% extends 'base.html' %}
 
 {% block body %}
-    
+
 <div class="row mx-2">
+
+<h3>Rules</h3>
+<ol class="mx-4">
+    <li>You can only add two songs that only you have voted for.</li>
+    <li>You can have up to five songs that at least one person other than you has voted for.</li>
+    <li>You have to have a Spotify account to play.</li>
+</ol>
+    
     <div class="col">
         <h1>CCPA Playlist</h1>
             {% for track in playlist %}
