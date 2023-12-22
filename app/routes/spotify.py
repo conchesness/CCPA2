@@ -9,6 +9,9 @@ from app.utils.secrets import getSecrets
 from app.classes.forms import SpotifySearchForm
 from app.classes.data import Playlist
 from mongoengine.errors import NotUniqueError
+import json
+from PIL import Image
+import io
 
 @app.route('/spotify')
 @login_required
@@ -19,7 +22,7 @@ def spotifyauth():
         "client_id": secrets['SPOTIFY_CLIENT_ID'],
         "response_type": "code",
         "redirect_uri": f"{request.host_url}spotifycallback",
-        "scope": "user-library-read"
+        "scope": "user-library-read, playlist-modify-private, playlist-modify-public, ugc-image-upload"
     }
 
     f"{request.host_url}spotifycallback"
@@ -46,7 +49,11 @@ def spotifycallback():
 
     r = requests.post("https://accounts.spotify.com/api/token", data=token_data, headers=token_headers)
 
-    session['spotifytoken'] = r.json()["access_token"]
+    session['spotifytoken'] = r.json()["access_token"] 
+
+    spotifyMe = requests.get(url="https://api.spotify.com/v1/me", headers={"Authorization": "Bearer " + session['spotifytoken']})
+
+    session['spotifyid'] = spotifyMe.json()['id']
 
     return redirect(url_for('playlist'))
 
@@ -179,4 +186,96 @@ def playlist():
 
     return render_template('spotify.html', form=form, playlist=playlist)
 
+@app.route('/updateplaylist')
+def updatePLaylist():
+
+    endpoint_url = f"https://api.spotify.com/v1/users/{session['spotifyid']}/playlists"
+
+    offset=0
+    limit=20
+    allPlaylists = []
+    while True:
+        playlists = requests.get(
+            url = endpoint_url + f'?offset={offset}&limit={limit}',
+            headers={
+                "Content-Type":"application/json", 
+                "Authorization": "Bearer " + session['spotifytoken']
+                }
+            )
+        playlists = playlists.json()
+        try:
+            allPlaylists += playlists['items']
+        except:
+            flash("Needed to refresh your credentials with Spotify.  Try again.")
+            return redirect(url_for('spotifyauth'))
+        if len(playlists['items']) < limit:
+            break
+        offset = offset + limit
     
+    playlists = allPlaylists
+
+    playlistExists = False
+    for playlist in playlists:
+        
+        if playlist['name'] == 'CCPA Community Playlist':
+            playlistExists = True
+            playlistid = playlist['id']
+            break
+
+    
+    request_body = json.dumps({
+        "name": "CCPA Community Playlist",
+        "description": "Playlist made by the CCPA Community",
+        "public": True
+    })
+
+    if not playlistExists:
+        response = requests.post(
+            url = endpoint_url, 
+            data = request_body, 
+            headers={
+                "Content-Type":"application/json", 
+                "Authorization": "Bearer " + session['spotifytoken']
+                }
+            )
+        try:
+            playlistid = response.json()['id']
+        except:
+            flash('had to refresh your spotify credientials. Try again!')
+            return redirect(url_for('spotify'))
+
+        im = Image.open('app/static/lion.jpg')
+        data = io.BytesIO()
+        im.save(data, "jpeg")
+        encoded_img_data = base64.b64encode(data.getvalue())
+
+        response = requests.put(
+            url = f'https://api.spotify.com/v1/playlists/{playlistid}/images',
+            headers = {
+                "Content-Type":"image/jpeg",
+                "Authorization": "Bearer " + session['spotifytoken']
+                },
+            data = encoded_img_data
+            )
+
+    tracks = Playlist.objects()
+
+    uris = []
+
+    for track in tracks:
+        uris.append(track.track_dict['uri'])
+
+    response = requests.put(
+        url = f"https://api.spotify.com/v1/playlists/{playlistid}/tracks",
+        headers = {
+            "Content-Type":"application/json",
+            "Authorization": "Bearer " + session['spotifytoken']
+            },
+        data = json.dumps({
+                "uris": uris
+            })
+        )
+
+    flash("Check your Spotify for the CCPA Community Playlist!")
+
+    return redirect(url_for('playlist'))

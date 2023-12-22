@@ -13,6 +13,7 @@
     
     <div class="col">
         <h1>CCPA Playlist</h1>
+        <a href="/updateplaylist">Add playlist to my spotify</a> <br>
             {% for track in playlist %}
             <div class="row ms-4">
                 <div class="col-3">
@@ -58,7 +59,7 @@
         <form method=post>
             {{ form.hidden_tag() }}
             
-            Search Spotify: <br> {{ form.track(size=64) }} <br>
+            Search Spotify: <br> {{ form.track() }} <br>
             {% if form.track.errors %}
                 {% for error in form.track.errors %}
                     <span style="color: red;">[{{ error }}]</span> <br>
