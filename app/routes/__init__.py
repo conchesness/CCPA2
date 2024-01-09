@@ -6,3 +6,4 @@ from .clinic import *
 from .roles import *
 from .wordcloud import *
 from .spotify import *
+from .qr import *

@@ -7,6 +7,11 @@ import mongoengine.errors
 from wtforms.validators import URL, Email, DataRequired
 from wtforms import StringField, SubmitField, TextAreaField, IntegerField, SelectField, FileField, BooleanField, URLField
 
+class QRForm(FlaskForm):
+    QRText = StringField()
+    size = SelectField(choices=[(1,1),(2,2),(3,3),(4,4),(5,5),(6,6),(7,7),(8,8),(9,9),(10,10)])
+    submit = SubmitField("Enter")
+
 class SpotifySearchForm(FlaskForm):
     track = StringField()
     artist = StringField()
