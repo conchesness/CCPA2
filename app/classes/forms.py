@@ -5,11 +5,17 @@
 from flask_wtf import FlaskForm
 import mongoengine.errors
 from wtforms.validators import URL, Email, DataRequired
-from wtforms import StringField, SubmitField, TextAreaField, IntegerField, SelectField, FileField, BooleanField, URLField
+from wtforms import StringField, SubmitField, TextAreaField, IntegerField, SelectField, FileField, BooleanField, URLField, ColorField
+#from wtforms.widgets.html5 import ColorInput
 
 class QRForm(FlaskForm):
     QRText = StringField()
     size = SelectField(choices=[(1,1),(2,2),(3,3),(4,4),(5,5),(6,6),(7,7),(8,8),(9,9),(10,10)])
+    borderSize = SelectField(choices=[(1,1),(2,2),(3,3),(4,4),(5,5),(6,6),(7,7),(8,8),(9,9),(10,10)])
+    colorDark = ColorField()
+    colorLight = ColorField()
+    colorDataDark = ColorField()
+    colorDataLight = ColorField()
     submit = SubmitField("Enter")
 
 class SpotifySearchForm(FlaskForm):

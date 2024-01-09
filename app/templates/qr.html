@@ -10,22 +10,67 @@
         <img id="picture" src="data:image/png;base64,{{ img_data }}"> <br>
     {% endif %}
 
-
+    <br><br>
 
     <form method=post>
         {{ form.hidden_tag() }}
         
-        QR Text: {{ form.QRText(size=64) }} <br>
+        Text to encode: {{ form.QRText(size=64) }} <br>
 
         {% for error in form.QRText.errors %}
             <span style="color: red;">[{{ error }}]</span>
         {% endfor %}
 
-        QR Size: {{ form.size() }} <br>
-        
-        {% for error in form.size.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
+        <table class="table table-sm">
+            <tr>
+                <td>
+                    QR Code
+                </td>
+                <td>
+                    {{ form.colorDark() }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    QR Code Background
+                </td>
+                <td>
+                    {{ form.colorLight() }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    QR Code Data
+                </td>
+                <td>
+                    {{ form.colorDataDark() }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    QR Code Data Background
+                </td>
+                <td>
+                    {{ form.colorDataLight() }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    QR Code Size
+                </td>
+                <td>
+                    {{ form.size() }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    QR Code Border Size
+                </td>
+                <td>
+                    {{ form.borderSize() }}
+                </td>
+            </tr>
+        </table>
 
         {{ form.submit() }}
 
