@@ -22,7 +22,6 @@ from bson.objectid import ObjectId
 from flask_security import RoleMixin
 from functools import wraps
 
-
 class User(UserMixin, Document):
     createdate = DateTimeField(defaultdefault=dt.datetime.utcnow)
     gid = StringField(sparse=True, unique=True)
@@ -36,8 +35,31 @@ class User(UserMixin, Document):
     prononuns = StringField()
     roles = ListField(ReferenceField("Role"))
 
+    tdivision = StringField()
+    school = StringField()
+    pronouns = StringField()
+    
+    # Below Is teacher only data
+    teacher_number = IntField(sparse=True,unique=True)
+    troom_number = StringField()
+    tdescription = StringField()
+    tdivision = StringField()
+    tdepartment = StringField()
+    troom_phone = IntField()
+
+    # Self-rating
+    late_work = IntField()
+    late_work_policy = StringField()
+    feedback = IntField()
+    feedback_policy = StringField()
+    classcontrol = IntField()
+    classcontrol_policy = StringField()
+    grading_policy = StringField()
+    classroom = StringField()
+
     meta = {
-        'ordering': ['lname','fname']
+        'ordering': ['lname','fname'],
+        'strict':False
     }
 
     def has_role(self, name):
@@ -122,6 +144,69 @@ class Clinic(Document):
     lat = FloatField()
     lon = FloatField()
     
+    meta = {
+        'ordering': ['-createdate']
+    }
+
+# _____________________ iRate
+
+class Courses(Document): 
+    course_number = StringField(required=True,unique=True)
+    course_title = StringField()
+    course_name = StringField()
+    course_ag_requirement = StringField()
+    course_difficulty = StringField()
+    course_department = StringField()
+    course_pathway = StringField()
+    course_gradelevel = StringField()
+    create_date = DateTimeField(default=dt.datetime.utcnow)
+    modify_date = DateTimeField()
+
+    meta = {
+        'ordering': ['-createdate'],
+        'indexes':
+            [
+                {
+                    'fields': ['course_name','course_title'],
+                    'collation' : {'locale': 'en', 'strength': 2} 
+                }   
+            ]
+        }
+
+class TeacherCourse(Document):
+    teachercourseid = StringField(sparse=True, required=True,unique=True)
+    teacher = ReferenceField('User',reverse_delete_rule=CASCADE, required=True) 
+    course = ReferenceField('Courses',reverse_delete_rule=CASCADE,required=True)
+    course_description = StringField()
+    course_files = FileField()
+    course_link = StringField()
+    create_date = DateTimeField(default=dt.datetime.utcnow)
+    modify_date = DateTimeField()
+
+    meta = {
+        'ordering': ['-createdate']
+    }
+
+class StudentReview(Document):
+    teacher_course = ReferenceField('TeacherCourse')
+    student = ReferenceField('User')
+    year_taken = IntField()
+    late_work = IntField()
+    feedback = IntField()
+    classcontrol = IntField()
+    grading_policy = IntField()
+    classroom_environment = IntField()
+    create_date = DateTimeField(default=dt.datetime.utcnow)
+    modify_date = DateTimeField()
+
+class Comment(Document):
+    author = ReferenceField('User',reverse_delete_rule=CASCADE) 
+    course = ReferenceField('Courses',reverse_delete_rule=CASCADE)
+    content = StringField()
+    create_date = DateTimeField(default=dt.datetime.utcnow)
+    modify_date = DateTimeField()
+    role = StringField("Role")
+
     meta = {
         'ordering': ['-createdate']
     }

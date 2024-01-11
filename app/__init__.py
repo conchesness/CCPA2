@@ -11,10 +11,15 @@ import certifi
 from app.utils.secrets import getSecrets
 from flask_moment import Moment
 import base64
+from flask_tinymce import TinyMCE
 
 # Flask app setup
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY") or os.urandom(24)
+
+# Initialize tinyMCE editor
+tinymce = TinyMCE()
+tinymce.init_app(app)
 
 # Configuration
 secrets = getSecrets()

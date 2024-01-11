@@ -17,6 +17,12 @@ def listroles():
         flash(role.name)
     return render_template('index.html')
 
+@app.route('/setroles')
+@require_role('admin')
+def setroles():
+    users = User.objects()
+    return render_template('user-roles.html',users=users)
+
 # These are commented out because they should not be generally available. Uncomment them to run them once.
 
 # @app.route('/makeroles')

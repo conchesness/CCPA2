@@ -2,7 +2,7 @@
 # Python standard libraries
 import json
 from app import app, login_manager
-from flask import redirect, request, url_for, flash
+from flask import redirect, request, url_for, flash, session
 from flask_login import (
     current_user,
     login_required,
@@ -179,6 +179,14 @@ def callback():
 
     # Begin user session by logging the user in
     login_user(thisUser)
+
+    for role in current_user.roles:
+        if role.name.lower() == 'admin':
+            session['isadmin'] = True
+        if role.name.lower() == 'student':
+            session['isstudent'] = True
+        if role.name.lower() == 'teacher':
+            session['isteacher'] = True
 
     # Send user back to homepage
     return redirect(url_for("index"))
