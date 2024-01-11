@@ -132,7 +132,7 @@ def callback():
         gname = userinfo_response.json()["name"]
         gfname = userinfo_response.json()["given_name"]
         glname = userinfo_response.json()["family_name"]
-        if gmail[:3] == "s_":
+        if gmail[:2] == "s_":
             studentRole = Role.objects.get(name="student")
             role = studentRole
         else:

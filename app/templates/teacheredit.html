@@ -133,7 +133,7 @@
                         Who are you? Why do you teach? What do you want 
                         students to get from your class?
                     </p>
-                    {{ form.tdescription(cols=64, rows=10, class="tmce-editor") }}
+                    {{ form.tdescription(cols=64, class="tmce-editor") }}
                     <!--List the errors for this field-->
                     {% for error in form.tdescription.errors %}
                         <span style="color: red;">[{{ error }}]</span>
@@ -143,7 +143,7 @@
                     <p class="fs-6">
                         Do you have a sink? Do you allow food/tea? Couch? 
                     </p>
-                    {{ form.classroom(cols=64, rows=4, class="tmce-editor") }}
+                    {{ form.classroom(class="tmce-editor") }}
                     <!--List the errors for this field-->
                     {% for error in form.classroom.errors %}
                         <span style="color: red;">[{{ error }}]</span>
