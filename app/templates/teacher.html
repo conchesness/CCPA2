@@ -78,7 +78,7 @@
                  Always
             </p>
                 {% if teacher.late_work_policy %}
-                    <p>penalty
+                    <p>
                         {{teacher.late_work_policy | safe}}
                     </p>
                 {% endif %}
@@ -145,18 +145,18 @@
                 &#60;So Much Empty>
             {% endif %}
         </p>
-        <p class="fs-2">Personal Statement</p>
-        <p class="fs-6">
-            {% if teacher.tdescription %}
-                {{teacher.tdescription|safe}}
-            {% else %}
-                &#60;So Much Empty>
-            {% endif %}
-        </p>
         <p class="fs-2">Classroom</p>
         <p class="fs-6">
             {% if teacher.classroom %}
                 {{teacher.classroom|safe}}
+            {% else %}
+                &#60;So Much Empty>
+            {% endif %}
+        </p>
+        <p class="fs-2">Personal Statement</p>
+        <p class="fs-6">
+            {% if teacher.tdescription %}
+                {{teacher.tdescription|safe}}
             {% else %}
                 &#60;So Much Empty>
             {% endif %}
