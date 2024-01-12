@@ -5,6 +5,7 @@ from flask import render_template, redirect, flash, url_for
 from app.classes.data import User, require_role, Role
 from app.classes.forms import ProfileForm
 from flask_login import current_user
+import requests
 
 # These routes and functions are for accessing and editing user profiles.
 

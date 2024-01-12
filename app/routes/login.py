@@ -46,7 +46,7 @@ def load_user(id):
         return User.objects.get(pk=id)
     except mongoengine.errors.DoesNotExist:
         flash("Something strange has happened. This user doesn't exist. Please click logout.")
-        return redirect(url_for('index'))
+        return redirect(url_for('logout'))
 
 def get_google_provider_cfg():
     return requests.get(secrets['GOOGLE_DISCOVERY_URL']).json()
@@ -193,7 +193,6 @@ def callback():
 
 
 @app.route("/logout")
-@login_required
 def logout():
     logout_user()
     return redirect(url_for("index"))
