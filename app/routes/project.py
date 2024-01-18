@@ -11,6 +11,10 @@ from app.classes.forms import ProjectForm, MilestoneForm
 from flask_login import login_required
 import datetime as dt
 
+@app.route('/project/definition')
+def projectDef():
+    return render_template('projects/project_def.html')
+
 @app.route('/project/list')
 @login_required
 def projectList():
@@ -71,15 +75,14 @@ def projectNew():
         newProj = Project(
             owner = current_user,
             name = form.name.data,
-            status = form.status.data,
-            #desc = form.desc.data,
+            status = "In Progress",
             product = form.product.data,
             createDateTime = dt.datetime.utcnow()
         )
 
         newProj.save()
 
-        return render_template('projects/project.html', proj=newProj)
+        return redirect(url_for('project',pid=newProj.id))
     
     return render_template('projects/project_form.html', form=form)
 
@@ -137,7 +140,8 @@ def project(pid):
             proj.milestones.create(
                 number = num,
                 name = form.name.data,
-                desc = form.desc.data
+                desc = form.desc.data,
+                status = "In Progress"
             )
             
             proj.save()
