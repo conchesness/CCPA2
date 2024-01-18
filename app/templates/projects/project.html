@@ -10,9 +10,9 @@
 {% endif %}
 
 {% if current_user.fname[-1] == 's'  %}
-    <h1>{{ current_user.fname }}' Project</h1>
+    <h1>{{ proj.owner.fname }}' Project</h1>
 {% else %}
-    <h1>{{ current_user.fname }}'s Project</h1>
+    <h1>{{ proj.owner.fname }}'s Project</h1>
 {% endif %}
 
 <h4>{{proj.name}}</h4>
@@ -44,6 +44,11 @@ Milestones are major accomplishments along the way to completing your project.
 A project should have several milestones. A small project might only have two or three total milestones. We will create only one milestone at a time. 
 When you complete a milestone you will create another one until the last milestone which is the project completion. <br> <br>
 
+{% if proj.milestones|length == 0 %}
+    No Milestones yet. <br>
+{% endif %}
+
+{% if proj.owner == current_user %}
 {% if proj.milestones|length == 0 or proj.milestones[-1].status == 'Done' or edit %}
     {% if edit %}
         <h3>Edit Milestone </h3>
@@ -63,6 +68,7 @@ When you complete a milestone you will create another one until the last milesto
         {{ form.status(class="form-control") }} <br>
         {{ form.submit(class="form-control btn-primary") }}
     </form> 
+{% endif %}
 {% endif %}
 
 {% endblock %}
