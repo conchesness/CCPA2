@@ -1,0 +1,34 @@
+<!-- this is a generic form page.  Best way to make a new form page is to 
+copy this one and then edit it. -->
+
+{% extends "base.html" %}
+
+{% block body %}
+        <h1>{{ current_user.fname }}'s Project</h1>
+        <br>
+        <!--List all errors in a group at the top-->
+        {% for field in form.errors %}
+            {% for error in form.errors[field] %}
+                <div class="alert alert-error">
+                    <strong>Error!</strong>{{field}}: {{error}}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <form method=post>
+            {{ form.hidden_tag() }}
+
+            <b>Hey, {{ current_user.fname }}, what do you want to make?</b> <br>
+            <small>Use the image icon to add images from the Internet.</small> <br>
+            {{ form.product(class='tmce-editor') }}</b>  <br>
+            
+            <b>Give it a name. What do you want to call this project?</b>  <br>
+            {{ form.name(class='form-control') }} <br>
+
+            <b>Status:</b><br>
+            {{ form.status(class='form-control') }} <br>
+
+            {{ form.submit(class='form-control btn-primary') }}
+        </form>
+        
+{% endblock %}

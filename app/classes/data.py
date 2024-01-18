@@ -13,8 +13,8 @@ from setuptools import SetuptoolsDeprecationWarning
 from app import app
 from flask import flash, redirect
 from flask_login import UserMixin, current_user
-from mongoengine import Document, ListField, FileField, EmailField, StringField, IntField, DictField
-from mongoengine import ReferenceField, DateTimeField, BooleanField, FloatField, CASCADE
+from mongoengine import Document, ListField, FileField, EmailField, StringField, IntField, DictField, EmbeddedDocumentListField, EmbeddedDocument
+from mongoengine import ReferenceField, DateTimeField, BooleanField, FloatField, ObjectIdField,CASCADE
 import datetime as dt
 #import jwt
 from time import time
@@ -23,7 +23,7 @@ from flask_security import RoleMixin
 from functools import wraps
 
 class User(UserMixin, Document):
-    createdate = DateTimeField(defaultdefault=dt.datetime.utcnow)
+    createdate = DateTimeField(default=dt.datetime.utcnow())
     gid = StringField(sparse=True, unique=True)
     gname = StringField()
     gprofile_pic = StringField()
@@ -104,12 +104,34 @@ class Playlist(Document):
         'ordering': ['num_users']
     }
 
+class Obstacle(EmbeddedDocument):
+    obstacle = StringField()
+    desc = StringField()
+
+class Milestone(EmbeddedDocument):
+    oid = ObjectIdField(default=ObjectId(), sparse=True, required=True, unique=True, primary_key=True)    
+    status = StringField(default="In Progress")
+    name = StringField()
+    number = IntField()
+    desc = StringField()
+    reflection = StringField()
+
+class Project(Document):
+    owner = ReferenceField('User')
+    status = StringField(default='In Progress')
+    createDateTime = DateTimeField(default=dt.datetime.utcnow())
+    name = StringField()
+    desc = StringField()
+    product = StringField()
+    obstacles = EmbeddedDocumentListField('Obstacle')
+    milestones = EmbeddedDocumentListField('Milestone')
+
 class Blog(Document):
     author = ReferenceField('User',reverse_delete_rule=CASCADE) 
     subject = StringField()
     content = StringField()
     tag = StringField()
-    create_date = DateTimeField(default=dt.datetime.utcnow)
+    create_date = DateTimeField(default=dt.datetime.utcnow())
     modify_date = DateTimeField()
 
     meta = {
@@ -124,7 +146,7 @@ class Comment(Document):
     comment = ReferenceField('Comment',reverse_delete_rule=CASCADE)
     # Line 68 is where you store all the info you need but won't find in the Course and Teacher Object
     content = StringField()
-    create_date = DateTimeField(default=dt.datetime.utcnow)
+    create_date = DateTimeField(default=dt.datetime.utcnow())
     modify_date = DateTimeField()
 
     meta = {
@@ -133,7 +155,7 @@ class Comment(Document):
 
 class Clinic(Document):
     author = ReferenceField('User',reverse_delete_rule=CASCADE) 
-    createdate = DateTimeField(default=dt.datetime.utcnow)
+    createdate = DateTimeField(default=dt.datetime.utcnow())
     modifydate = DateTimeField()
     name = StringField()
     streetAddress = StringField()
@@ -159,7 +181,7 @@ class Courses(Document):
     course_department = StringField()
     course_pathway = StringField()
     course_gradelevel = StringField()
-    create_date = DateTimeField(default=dt.datetime.utcnow)
+    create_date = DateTimeField(default=dt.datetime.utcnow())
     modify_date = DateTimeField()
 
     meta = {
@@ -180,7 +202,7 @@ class TeacherCourse(Document):
     course_description = StringField()
     course_files = FileField()
     course_link = StringField()
-    create_date = DateTimeField(default=dt.datetime.utcnow)
+    create_date = DateTimeField(default=dt.datetime.utcnow())
     modify_date = DateTimeField()
 
     meta = {
@@ -196,14 +218,14 @@ class StudentReview(Document):
     classcontrol = IntField()
     grading_policy = IntField()
     classroom_environment = IntField()
-    create_date = DateTimeField(default=dt.datetime.utcnow)
+    create_date = DateTimeField(default=dt.datetime.utcnow())
     modify_date = DateTimeField()
 
 class Comment(Document):
     author = ReferenceField('User',reverse_delete_rule=CASCADE) 
     course = ReferenceField('Courses',reverse_delete_rule=CASCADE)
     content = StringField()
-    create_date = DateTimeField(default=dt.datetime.utcnow)
+    create_date = DateTimeField(default=dt.datetime.utcnow())
     modify_date = DateTimeField()
     role = StringField("Role")
 

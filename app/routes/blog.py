@@ -100,7 +100,7 @@ def blogNew():
             tag = form.tag.data,
             author = current_user.id,
             # This sets the modifydate to the current datetime.
-            modify_date = dt.datetime.utcnow
+            modify_date = dt.datetime.utcnow()
         )
         # This is a method that saves the data to the mongoDB database.
         newBlog.save()
@@ -143,7 +143,7 @@ def blogEdit(blogID):
             subject = form.subject.data,
             content = form.content.data,
             tag = form.tag.data,
-            modify_date = dt.datetime.utcnow
+            modify_date = dt.datetime.utcnow()
         )
         # After updating the document, send the user to the updated blog using a redirect.
         return redirect(url_for('blog',blogID=blogID))
@@ -194,7 +194,7 @@ def commentEdit(commentID):
     if form.validate_on_submit():
         editComment.update(
             content = form.content.data,
-            modifydate = dt.datetime.utcnow
+            modifydate = dt.datetime.utcnow()
         )
         return redirect(url_for('blog',blogID=editComment.blog.id))
 

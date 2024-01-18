@@ -8,3 +8,4 @@ from .wordcloud import *
 from .spotify import *
 from .qr import *
 from .coursecatalog import *
+from .project import *

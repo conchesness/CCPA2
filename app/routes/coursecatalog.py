@@ -177,7 +177,7 @@ def courseNew():
             course_difficulty = form.course_difficulty.data,
             course_department = form.course_department.data,
             course_gradelevel = form.course_gradelevel.data,
-            modify_date = dt.datetime.utcnow
+            modify_date = dt.datetime.utcnow()
         )
         newCourse.save()
 
@@ -203,7 +203,7 @@ def courseEdit(courseID):
             course_department = form.course_department.data,
             course_ = form.course_pathway.data,
             course_gradelevel = form.course_gradelevel.data,
-            modify_date = dt.datetime.utcnow
+            modify_date = dt.datetime.utcnow()
         )
         return redirect(url_for('course',courseID=courseID))
 
@@ -443,7 +443,7 @@ def studentReviewNew(tcid):
             classcontrol = form.classcontrol.data,
             grading_policy = form.grading_policy.data,
             classroom_environment = form.classroom_environment.data,
-            modify_date = dt.datetime.utcnow
+            modify_date = dt.datetime.utcnow()
         )
 
         newStudentReview.save()
@@ -487,7 +487,7 @@ def commentEdit(commentID):
     if form.validate_on_submit():
         editComment.update(
             content = form.content.data,
-            modify_date = dt.datetime.utcnow
+            modify_date = dt.datetime.utcnow()
         )
         return redirect(url_for('course',courseID=editComment.course.id))
 

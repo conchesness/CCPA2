@@ -86,7 +86,7 @@ def clinicNew():
             zipcode = form.zipcode.data,
             description = form.description.data,
             author = current_user.id,
-            modifydate = dt.datetime.utcnow,
+            modifydate = dt.datetime.utcnow(),
         )
         newClinic.save()
 
@@ -116,7 +116,7 @@ def clinicEdit(clinicID):
             state = form.state.data,
             zipcode = form.zipcode.data,            
             description = form.description.data,
-            modifydate = dt.datetime.utcnow,
+            modifydate = dt.datetime.utcnow(),
         )
         editClinic = updateLatLon(editClinic)
         return redirect(url_for('clinic',clinicID=clinicID))

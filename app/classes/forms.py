@@ -64,8 +64,8 @@ class ProfileForm(FlaskForm):
     pronouns = StringField('Pronouns')
     fname = StringField('First Name', validators=[DataRequired()])
     lname = StringField('Last Name', validators=[DataRequired()]) 
-    role = SelectField('Role',choices=[("Teacher","Teacher"),("Student","Student")])
-    school = SelectField('School',choices=[("Oakland Technical High School","Oakland Technical High School")])
+    #role = SelectField('Role',choices=[("Teacher","Teacher"),("Student","Student")])
+    #school = SelectField('School',choices=[("Oakland Technical High School","Oakland Technical High School")])
     image = FileField("Image") 
     submit = SubmitField('Post')
 
@@ -117,3 +117,20 @@ class StudentReviewForm(FlaskForm):
     classroom_environment = IntegerRangeField("Classroom Environment",validators=[(InputRequired())])
     submit = SubmitField('Submit')
 
+class ProjectForm(FlaskForm):
+    name = StringField('Name')
+    #desc = TextAreaField('Description')
+    product = TextAreaField('What do you think you will make?')
+    status = SelectField('Status',choices=[('In Progress','In Progress'),('Done','Done')])
+    submit = SubmitField('Enter')
+
+class MilestoneForm(FlaskForm):
+    status = SelectField('Status',choices=[('In Progress','In Progress'),('Done','Done'),('Delete','Delete')])
+    name = StringField('Name')
+    desc = TextAreaField('Description')
+    reflection = TextAreaField('Reflection')
+    submit = SubmitField('Enter')
+
+class ObstacleForm(FlaskForm):
+    name = StringField('Name')
+    desc = TextAreaField('Why is this an obstacle?')
