@@ -21,24 +21,6 @@ like the navbar. -->
     <!--This includes a javascript library for formatting date and time.-->
       {{ moment.include_moment() }}
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.5.1/tinymce.min.js" integrity="sha512-SJh7xW/9SLzllt0PqjnYlomfUPi7UYF40TXU5m6kVXLFr1hdKe+L8Tqqoi1y9vlsMQBdGC2lZI0d6w04Nn6piQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script type="text/javascript">
-      tinymce.init({
-          selector: 'textarea.tmce-editor',
-          height: 200,
-          theme: 'modern',
-          plugins: [
-            'advlist autolink lists link image charmap print preview hr anchor pagebreak',
-            'searchreplace wordcount visualblocks visualchars code fullscreen',
-            'insertdatetime media nonbreaking save table contextmenu directionality',
-            'emoticons template paste textcolor colorpicker textpattern imagetools'
-          ],
-          toolbar1: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-          toolbar2: 'print preview media | forecolor backcolor emoticons',
-          image_advtab: true
-      });
-    </script>
-
 </head>
 <body>
   <!--This is where the navbar is placed.  The navbar code is in the includes folder -->

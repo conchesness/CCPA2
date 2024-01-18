@@ -115,6 +115,7 @@ class Milestone(EmbeddedDocument):
     number = IntField()
     desc = StringField()
     reflection = StringField()
+    sat = IntField()
 
 class Project(Document):
     owner = ReferenceField('User')

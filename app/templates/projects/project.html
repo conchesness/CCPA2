@@ -25,14 +25,18 @@
 {% if proj.milestones|length != 0 and not edit %}
     <h3>Milestones</h3>
     {% for m in proj.milestones %}
-        <a href="/project/milestone/edit/{{proj.id}}/{{m.oid}}"><img width='20' src="/static/edit.png"></a>
-        <a href="/project/milestone/delete/{{proj.id}}/{{m.oid}}"><img width='20' src="/static/delete.png"></a>
+    {% if current_user == proj.owner %}
+        <a data-toggle="tooltip" data-placement="top" title="Edit Milestone" href="/project/milestone/edit/{{proj.id}}/{{m.oid}}"><img width='20' src="/static/edit.png"></a>
+        <a data-toggle="tooltip" data-placement="top" title="Delete Milestone" href="/project/milestone/delete/{{proj.id}}/{{m.oid}}"><img width='20' src="/static/delete.png"></a>
+        <a data-toggle="tooltip" data-placement="top" title="Mark Milestone as Complete" href="/project/milestone/reflection/{{proj.id}}/{{m.oid}}"><img width="30" src="/static/finish.png"></a>
+    {% endif %}
         <br>
         <h4>#{{m.number}}: {{m.name}}</h4>
         <b>Status:</b> {{m.status}} <br>
-        <b>Description:</b> <br> {{m.desc|safe}} <br>
+        <b>Description:</b><br>
+        {{m.desc|safe}}
         {% if m.reflection %}
-            <b>Description:</b> <br>
+            <b>Reflection:</b> <br>
             {{m.reflection|safe}} <br>
         {% endif %}
         <hr>
@@ -70,5 +74,17 @@ When you complete a milestone you will create another one until the last milesto
     </form> 
 {% endif %}
 {% endif %}
+
+{% block javascript %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.2/tinymce.min.js" integrity="sha512-6JR4bbn8rCKvrkdoTJd/VFyXAN4CE9XMtgykPWgKiHjou56YDJxWsi90hAeMTYxNwUnKSQu9JPc3SQUg+aGCHw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script type="text/javascript">
+    tinymce.init({
+        selector: 'textarea.tmce-editor',
+        plugins:'advlist autolink lists link image charmap print preview hr anchor pagebreak searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking save table contextmenu directionality emoticons template paste textcolor colorpicker textpattern imagetools',
+        toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media | forecolor backcolor emoticons',
+        image_advtab: true
+    });
+  </script>
+{% endblock %}
 
 {% endblock %}

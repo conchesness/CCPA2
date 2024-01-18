@@ -7,7 +7,7 @@ import mongoengine.errors
 from flask import render_template, flash, redirect, url_for
 from flask_login import current_user
 from app.classes.data import require_role, Project, Milestone
-from app.classes.forms import ProjectForm, MilestoneForm
+from app.classes.forms import ProjectForm, MilestoneForm, MilestoneRefForm
 from flask_login import login_required
 import datetime as dt
 
@@ -192,3 +192,29 @@ def projectMsEdit(pid,mid):
     form.status.process_data(ms.status)
 
     return render_template('projects/project.html',proj=proj,form=form,edit=True)
+
+@app.route('/project/milestone/reflection/<pid>/<mid>', methods=['GET','POST'])
+@login_required
+def projectMsRefl(pid,mid):
+
+    form = MilestoneRefForm()
+
+    try:
+        proj = Project.objects.get(pk=pid)
+    except mongoengine.errors.DoesNotExist:
+        flash("That project doesn't exist.")
+        return render_template('index.html')
+
+    ms = proj.milestones.get(oid=mid)
+
+    if form.validate_on_submit():
+        proj.milestones.filter(oid=mid).update(
+            reflection = form.reflection.data,
+            sat = form.sat.data,
+            status = "Done"
+        )
+        proj.save()
+
+        return redirect(url_for('project',pid=pid))
+
+    return render_template('projects/milestone_reflection.html',form=form,proj=proj,ms=ms)

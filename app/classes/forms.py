@@ -128,9 +128,15 @@ class MilestoneForm(FlaskForm):
     status = SelectField('Status',choices=[('In Progress','In Progress'),('Done','Done'),('Delete','Delete')])
     name = StringField('Name')
     desc = TextAreaField('Description')
-    reflection = TextAreaField('Reflection')
-    submit = SubmitField('Enter')
+    #reflection = TextAreaField('Reflection')
+    submit = SubmitField('Save')
+
+class MilestoneRefForm(FlaskForm):
+    reflection = TextAreaField()
+    sat = SelectField('Satisfaction',choices=[(0,''),(5,'Proud'),(4,'Satisfied'),(3,"It's Fine"),(2,'Could have been better'),(1,'Yuck')])
+    submit = SubmitField('Save')
 
 class ObstacleForm(FlaskForm):
     name = StringField('Name')
     desc = TextAreaField('Why is this an obstacle?')
+    submit = SubmitField('Save')
