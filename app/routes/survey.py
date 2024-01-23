@@ -10,6 +10,7 @@ from app.classes.data import require_role, Survey
 from flask_login import login_required
 import datetime as dt
 import pandas as pd
+import html
 
 @app.route('/survey')
 @login_required
@@ -38,10 +39,10 @@ def surveyQByAdults(adult):
     elist = [['Email','Other Adults','Intersectionality','Safety Narrative']]
 
     for e in entries:
-        if adult in e.adults_safety_list:
+        if html.escape(adult) in e.adults_safety_list:
             elist.append([e.email,e.adults_safety_list,e.identity_list,e.safety_narrative])
 
-    return render_template('survey/surveybyadult.html',elist=elist,adult=adult)
+    return render_template('survey/surveybyadult.html',elist=elist,adult=html.escape(adult))
 
 @app.route('/survey/safety/adult/int')
 @login_required
