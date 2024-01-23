@@ -6,6 +6,8 @@ from app.classes.data import User, require_role, Role
 from app.classes.forms import ProfileForm
 from flask_login import current_user
 import requests
+import pandas as pd
+import mongoengine.errors
 
 # These routes and functions are for accessing and editing user profiles.
 
@@ -53,3 +55,68 @@ def profileEdit():
 
     return render_template('profileform.html', form=form)
 
+@app.route("/checknames")
+def checknames():
+    stusDF = pd.read_csv('./app/static/names.csv', quotechar='"')
+    stusDict = stusDF.to_dict('index')
+    num = len(stusDict)
+    sheet = ''
+    stuRole = Role.objects.get(name='student')
+    for i,row in enumerate(stusDict):
+        row = stusDict[row]
+        stus = User.objects(grade=row['grade'],fname__iexact=row['fname'], roles__contains=stuRole)
+        try:
+            len(stus)
+        except:
+            pass
+        else:
+            if len(stus) > 1:
+                print(f"{row['fname']} {row['lname1']} {row['lname2']} {row['lname3']}")
+                for stu in stus:
+                    print(f"{row['timestamp']},{stu.email}")
+                print()
+
+    print(f"total checked {i}")
+
+    return render_template('index.html')
+
+
+
+@app.route("/importusers")
+def importusers():
+    stusDF = pd.read_csv('./app/static/allStudentsCCPA.csv', quotechar='"')
+    stusDict = stusDF.to_dict('index')
+    num = len(stusDict)
+    stuRole = Role.objects.get(name='student')
+    for i,row in enumerate(stusDict):
+        row = stusDict[row]
+        try:
+            stu = User.objects.get(email = row['oemail'])
+        except mongoengine.errors.DoesNotExist:
+            print(f"{row['oemail']} does not exist")
+            stu = User(
+                email = row['oemail'],
+                aeriesid = row['aeriesid'],
+                fname = row['afname'],
+                lname = row['alname'],
+                agender = row['agender'],
+                afamkey = row['afamkey'],
+                grade = row['grade']
+            )
+            stu.save()
+        except mongoengine.errors.MultipleObjectsReturned:
+            print(f"{row['oemail']} has more than one entry.")
+        else:
+            #print(f"{row['oemail']} has been updated.")
+            # stu.update(
+            #     aeriesid = row['aeriesid'],
+            #     agender = row['agender'],
+            #     afamkey = row['afamkey'],
+            #     grade = row['grade']
+            # )
+            if not stuRole in stu.roles:
+                stu.roles.append(stuRole)
+                stu.save()
+                print(f"{i}/{num}")
+
+    return render_template("index.html")

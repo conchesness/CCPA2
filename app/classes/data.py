@@ -25,15 +25,19 @@ from functools import wraps
 class User(UserMixin, Document):
     createdate = DateTimeField(default=dt.datetime.utcnow())
     gid = StringField(sparse=True, unique=True)
+    aeriesid = IntField(sparse=True,unique=True)
     gname = StringField()
     gprofile_pic = StringField()
     username = StringField()
     fname = StringField()
     lname = StringField()
-    email = EmailField()
+    email = EmailField(sparse=True,unique=True)
     image = FileField()
     prononuns = StringField()
     roles = ListField(ReferenceField("Role"))
+    agender = StringField()
+    afamkey = IntField()
+    grade = IntField()
 
     tdivision = StringField()
     school = StringField()
@@ -77,7 +81,7 @@ class User(UserMixin, Document):
 
 class Role(RoleMixin, Document):
     # The RoleMixin requires this field to be named "name"
-    name = StringField()
+    name = StringField(unique=True)
 
 # To require a role for a specific route use this decorator
 # @require_role(role="student")
@@ -233,3 +237,22 @@ class Comment(Document):
     meta = {
         'ordering': ['-createdate']
     }
+
+class Survey(Document):
+    timestamp = StringField()
+    email = StringField()
+    grade = StringField()
+    full_name = StringField()
+    identity = StringField()
+    identity_list = ListField(StringField())
+    safety_narrative = StringField()
+    adults_safety = StringField()
+    adults_safety_list = ListField(StringField())
+    race_narrative = StringField()
+    adults_race = ListField(StringField())
+    expert_narrative = StringField()
+    adults_expert = ListField(StringField())
+    events_narrative = StringField()
+    ideas_narrative = StringField()
+    other_narrative = StringField()
+

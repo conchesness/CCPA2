@@ -1,0 +1,25 @@
+<!-- This is a blank template.  You can copy this to make a new template page. -->
+
+{% extends 'base.html' %}
+
+{% block body %}
+
+<div class="row">
+    <div class="col-3">
+        <ul>
+            {% for adult in adultsDicts %}
+                <b>{{adult[0]}}</b> <a href="/survey/qbyadults/{{adult[1]}}">{{adult[1]}}</a> <br>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="col">
+        {% for adult in adults %}
+            <b>{{adult}}</b> {{adults[adult]}}<br> <br>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+
+{% endblock %}

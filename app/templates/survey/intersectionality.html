@@ -1,0 +1,25 @@
+<!-- This is a blank template.  You can copy this to make a new template page. -->
+
+{% extends 'base.html' %}
+
+{% block body %}
+
+<div class="row">
+    <div class="col-3">
+        
+            {% for id in ids %}
+                <b>{{id[0]}}: <a href="/survey/qbyids/{{id[1]}}">{{id[1]}}</a></b> <br>
+            {% endfor %}
+        
+    </div>
+    <div class="col">
+        {% for id in idsDict %}
+            <b>{{id}}</b> {{idsDict[id]}}<br> <br>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+
+{% endblock %}

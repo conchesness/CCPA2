@@ -1,0 +1,15 @@
+<!-- This is a blank template.  You can copy this to make a new template page. -->
+
+{% extends 'base.html' %}
+
+{% block body %}
+
+Total: {{adults|length}} <br>
+
+{% for a in adults %}
+
+    {{a[0]}}: {{a[1]}} <br>
+
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,27 @@
+<!-- This is a blank template.  You can copy this to make a new template page. -->
+
+{% extends 'base.html' %}
+
+{% block body %}
+<h1>Safety narrative by students who identify {{iden}}</h1>
+<table class="table">
+{% for e in elist %}
+    {% if loop.index == 1 %}<th>{% else %}<td>{% endif %}
+        {{e[0]}}
+    {% if loop.index == 1 %}</th>{% else %}</td>{% endif %}
+
+    {% if loop.index == 1 %}<th>{% else %}<td>{% endif %}
+        {{e[1]}}
+    {% if loop.index == 1 %}</th>{% else %}</td>{% endif %}
+
+    {% if loop.index == 1 %}<th>{% else %}<td>{% endif %}
+        {{e[2]}}
+    {% if loop.index == 1 %}</th>{% else %}</td>{% endif %}
+
+    {% if loop.index == 1 %}<th>{% else %}<td>{% endif %}
+        {{e[3]}}
+    {% if loop.index == 1 %}</th>{% else %}</td>{% endif %}
+    </tr>
+{% endfor %}
+</table>
+{% endblock %}

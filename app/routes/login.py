@@ -180,6 +180,7 @@ def callback():
     # Begin user session by logging the user in
     login_user(thisUser)
 
+    tempRoles = []
     for role in current_user.roles:
         if role.name.lower() == 'admin':
             session['isadmin'] = True
@@ -187,6 +188,9 @@ def callback():
             session['isstudent'] = True
         if role.name.lower() == 'teacher':
             session['isteacher'] = True
+        if role.name.lower() == 'confidential':
+            session['isconfidential'] = True
+        tempRoles.append(role)
 
     # Send user back to homepage
     return redirect(url_for("index"))

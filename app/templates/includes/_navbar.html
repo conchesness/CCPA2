@@ -13,6 +13,11 @@
             <a class="nav-link" href="{{ url_for('login') }}">Login</a>
           </li>
         {% else %}
+          {% if session['isconfidential'] %}
+            <li class="nav-item">
+              <a class="nav-link" href="/survey">Survey</a>
+            </li>
+          {% endif %}
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Tools

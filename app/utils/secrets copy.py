@@ -14,4 +14,3 @@ def getSecrets():
     return secrets
 
 
-    #        'MONGO_HOST':'mongodb+srv://admin:bu11d0gz@cluster0.8m0v1.mongodb.net',
