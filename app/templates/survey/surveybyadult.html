@@ -5,26 +5,23 @@
 {% block body %}
 <h1>Safety narrative by students who feel safe with <b>{{adult}}</b></h1>
 <table class="table">
-{% for e in elist %}
-    <tr>
+    {% for e in elist %}
         {% if loop.index == 1 %}<th>{% else %}<td>{% endif %}
             {{e[0]}}
         {% if loop.index == 1 %}</th>{% else %}</td>{% endif %}
-
+    
         {% if loop.index == 1 %}<th>{% else %}<td>{% endif %}
             {{e[1]}}
         {% if loop.index == 1 %}</th>{% else %}</td>{% endif %}
-
+    
         {% if loop.index == 1 %}<th>{% else %}<td>{% endif %}
             {{e[2]}}
         {% if loop.index == 1 %}</th>{% else %}</td>{% endif %}
-
+    
         {% if loop.index == 1 %}<th>{% else %}<td>{% endif %}
             {{e[3]}}
         {% if loop.index == 1 %}</th>{% else %}</td>{% endif %}
-        
-    </tr>
-    {% if loop.index == 1 %}</b>{% endif %}
-{% endfor %}
-</table>
+        </tr>
+    {% endfor %}
+    </table>
 {% endblock %}
