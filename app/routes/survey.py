@@ -10,7 +10,7 @@ from app.classes.data import require_role, Survey
 from flask_login import login_required
 import datetime as dt
 import pandas as pd
-import html
+import urllib
 
 @app.route('/survey')
 @login_required
@@ -35,7 +35,7 @@ def surveyQByIds(iden):
 @login_required
 @require_role(role="confidential")
 def surveyQByAdults(adult):
-    adult=html.escape(adult)
+    adult = urllib.parse.unquote(adult)
     entries=Survey.objects()
     elist = [['Email','Other Adults','Intersectionality','Safety Narrative']]
 
