@@ -140,3 +140,7 @@ class ObstacleForm(FlaskForm):
     name = StringField('Name')
     desc = TextAreaField('Why is this an obstacle?')
     submit = SubmitField('Save')
+
+class TxtAreaForm(FlaskForm):
+    ta = StringField()
+    submit = SubmitField('Save')
