@@ -15,6 +15,8 @@ import pandas as pd
 import urllib
 
 @app.route('/survey/expert/<sid>',methods=['POST','GET'])
+@login_required
+@require_role(role="teacher")
 def surveyRaceEdit(sid):
     entries = Survey.objects(pk=sid)
     entries2 = Survey.objects()
@@ -34,6 +36,8 @@ def surveyRaceEdit(sid):
 
 
 @app.route('/survey/expert', methods=['GET','POST'])
+@login_required
+@require_role(role="teacher")
 def surveyRace():
     query = Q(adults_expert__exists = True) & Q(adults_expert__size = 0)
     entries = Survey.objects(query)
@@ -55,14 +59,14 @@ def surveyRace():
 
 @app.route('/survey')
 @login_required
-@require_role(role="confidential")
+@require_role(role="teacher")
 def survey():
     return render_template('/survey/survey.html')
 
 ### Safety ###
 @app.route('/survey/qbyids/<iden>')
 @login_required
-@require_role(role="confidential")
+@require_role(role="teacher")
 def surveyQByIds(iden):
     iden=urllib.parse.unquote(iden)
     entries=Survey.objects()
@@ -71,12 +75,12 @@ def surveyQByIds(iden):
     for e in entries:
         if iden in e.identity_list:
             elist.append([e.email,e.identity_list,e.adults_safety_list,e.safety_narrative])
-
-    return render_template('survey/surveybyid.html',elist=elist,iden=iden)
+    desc=f"Student who identify {iden} and the adults that make them feel safe"
+    return render_template('survey/surveybyid.html',elist=elist,iden=iden,desc=desc)
     
 @app.route('/survey/qbyadults/<adult>')
 @login_required
-@require_role(role="confidential")
+@require_role(role="teacher")
 def surveyQByAdults(adult):
     adult = urllib.parse.unquote(adult)
     entries=Survey.objects()
@@ -85,12 +89,12 @@ def surveyQByAdults(adult):
     for e in entries:
         if adult in e.adults_safety_list:
             elist.append([e.email,e.adults_safety_list,e.identity_list,e.safety_narrative])
-
-    return render_template('survey/surveybyadult.html',elist=elist,adult=adult)
+    desc=f"Students that say {adult} makes them feel safe"
+    return render_template('survey/surveybyadult.html',elist=elist,adult=adult,desc=desc)
 
 @app.route('/survey/safety/adult/int')
 @login_required
-@require_role(role="confidential")
+@require_role(role="teacher")
 def surveyAdultInt():
     entries = Survey.objects()
     
@@ -125,7 +129,7 @@ def surveyAdultInt():
 
 @app.route('/survey/safety/int/adult')
 @login_required
-@require_role(role="confidential")
+@require_role(role="teacher")
 def surveyIntSafety():
     entries = Survey.objects()
     ids = []
@@ -144,8 +148,6 @@ def surveyIntSafety():
         idCounts.append([len(x),id])
     idCounts = sorted(idCounts, key=lambda x: x[0],reverse=True)
 
-
-
     idsDict={}
     for identity in idsdd:
         adults=[]
@@ -157,7 +159,6 @@ def surveyIntSafety():
         adults.sort()
         idsDict[identity] = adults
 
-
     return render_template('survey/intersectionality.html',ids=idCounts,idsDict=idsDict)
 
 ### race ###
@@ -165,7 +166,7 @@ def surveyIntSafety():
 
 @app.route('/survey/raceqbyids/<iden>')
 @login_required
-@require_role(role="confidential")
+@require_role(role="teacher")
 def surveyRaceQByIds(iden):
     iden=urllib.parse.unquote(iden)
     entries=Survey.objects()
@@ -174,12 +175,12 @@ def surveyRaceQByIds(iden):
     for e in entries:
         if iden in e.identity_list:
             elist.append([e.email,e.identity_list,e.adults_race,e.race_narrative])
-
-    return render_template('survey/surveybyid.html',elist=elist,iden=iden)
+    desc=f"Student who identify {iden} and the adults they talk to about race"
+    return render_template('survey/surveybyid.html',elist=elist,iden=iden,desc=desc)
     
 @app.route('/survey/raceqbyadults/<adult>')
 @login_required
-@require_role(role="confidential")
+@require_role(role="teacher")
 def surveyRaceQByAdults(adult):
     adult = urllib.parse.unquote(adult)
     entries=Survey.objects()
@@ -188,12 +189,12 @@ def surveyRaceQByAdults(adult):
     for e in entries:
         if adult in e.adults_race:
             elist.append([e.email,e.adults_race,e.identity_list,e.race_narrative])
-
-    return render_template('survey/surveybyadult.html',elist=elist,adult=adult)
+    desc=f"Students who talk to {adult} about race."
+    return render_template('survey/surveybyadult.html',elist=elist,adult=adult,desc=desc)
 
 @app.route('/survey/race/adult/int')
 @login_required
-@require_role(role="confidential")
+@require_role(role="teacher")
 def surveyRaceAdultInt():
     entries = Survey.objects()
     
@@ -228,7 +229,7 @@ def surveyRaceAdultInt():
 
 @app.route('/survey/race/int/adult')
 @login_required
-@require_role(role="confidential")
+@require_role(role="teacher")
 def surveyRaceIntSafety():
     entries = Survey.objects()
     ids = []
@@ -267,7 +268,7 @@ def surveyRaceIntSafety():
 
 @app.route('/survey/expertqbyadults/<adult>')
 @login_required
-@require_role(role="confidential")
+@require_role(role="teacher")
 def surveyExpertQByAdults(adult):
     adult = urllib.parse.unquote(adult)
     entries=Survey.objects()
@@ -276,12 +277,12 @@ def surveyExpertQByAdults(adult):
     for e in entries:
         if adult in e.adults_expert:
             elist.append([e.email,e.adults_expert,e.identity_list,e.expert_narrative])
-
-    return render_template('survey/surveybyadult.html',elist=elist,adult=adult)
+    desc=f"Students that see {adult} as an expert."
+    return render_template('survey/surveybyadult.html',elist=elist,adult=adult, desc=desc)
 
 @app.route('/survey/expert/adult/int')
 @login_required
-@require_role(role="confidential")
+@require_role(role="teacher")
 def surveyExpertAdultInt():
     entries = Survey.objects()
     
@@ -395,17 +396,17 @@ def surveyExpertAdultInt():
 
 #     return redirect(url_for('adults_safety'))
 
-@app.route('/afix')
-def afix():
-    entries = Survey.objects()
-    ids=[]
-    for e in entries:
-        for n,i in enumerate(e.adults_race):
-            if 'idk' == i.lower():
-                e.adults_race[n] = 'blank, none or idk'
-                e.save()
+# @app.route('/afix')
+# def afix():
+#     entries = Survey.objects()
+#     ids=[]
+#     for e in entries:
+#         for n,i in enumerate(e.adults_race):
+#             if 'idk' == i.lower():
+#                 e.adults_race[n] = 'blank, none or idk'
+#                 e.save()
 
-    return redirect(url_for('listids'))
+#     return redirect(url_for('listids'))
 
 # @app.route('/wsstrip')
 # @login_required

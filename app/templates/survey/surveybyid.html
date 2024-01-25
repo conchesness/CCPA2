@@ -3,7 +3,7 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<h1>Safety narrative by students who identify {{iden}}</h1>
+<h1>{{desc}}</h1>
 <table class="table">
 {% for e in elist %}
     {% if loop.index == 1 %}<th>{% else %}<td>{% endif %}
