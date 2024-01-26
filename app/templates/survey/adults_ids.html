@@ -10,6 +10,7 @@
 <div class="row">
     <div class="col-3">
         <ul>
+            <b>Total: {{adultsDicts|length}} different adults</b> <br>
             {% for adult in adultsDicts %}
                 <b>{{adult[0]}}</b> <a href="/survey/qbyadults/{{adult[1]}}">{{adult[1]}}</a> <br>
             {% endfor %}
