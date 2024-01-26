@@ -28,11 +28,11 @@ def survey():
 def surveyQByIds(iden):
     iden=urllib.parse.unquote(iden)
     entries=Survey.objects()
-    elist = [['Email','Intersectionality','adults','Safety Narrative']]
+    elist = [['Full Name','Intersectionality','adults','Safety Narrative']]
 
     for e in entries:
         if iden in e.identity_list:
-            elist.append([e.email,e.identity_list,e.adults_safety_list,e.safety_narrative])
+            elist.append([f"{e.full_name} ({e.grade})",e.identity_list,e.adults_safety_list,e.safety_narrative])
     desc=f"Student who identify {iden} and the adults that make them feel safe"
     q = "Which adults at CCPA make you feel the most safe, and what do they do to make you feel safe?"
     return render_template('survey/surveybyid.html',elist=elist,iden=iden,desc=desc,q=q)
@@ -43,11 +43,11 @@ def surveyQByIds(iden):
 def surveyQByAdults(adult):
     adult = urllib.parse.unquote(adult)
     entries=Survey.objects()
-    elist = [['Email','Other Adults','Intersectionality','Safety Narrative']]
+    elist = [['Full Name','Other Adults','Intersectionality','Safety Narrative']]
 
     for e in entries:
         if adult in e.adults_safety_list:
-            elist.append([e.email,e.adults_safety_list,e.identity_list,e.safety_narrative])
+            elist.append([f"{e.full_name} ({e.grade})",e.adults_safety_list,e.identity_list,e.safety_narrative])
     desc=f"Students that say {adult} makes them feel safe"
     q="Which adults at CCPA make you feel the most safe, and what do they do to make you feel safe?"
     return render_template('survey/surveybyadult.html',elist=elist,adult=adult,desc=desc,q=q)
@@ -130,11 +130,11 @@ def surveyIntSafety():
 def surveyRaceQByIds(iden):
     iden=urllib.parse.unquote(iden)
     entries=Survey.objects()
-    elist = [['Email','Intersectionality','adults','Race Narrative']]
+    elist = [['Full Name','Intersectionality','adults','Race Narrative']]
 
     for e in entries:
         if iden in e.identity_list:
-            elist.append([e.email,e.identity_list,e.adults_race,e.race_narrative])
+            elist.append([f"{e.full_name} ({e.grade})",e.identity_list,e.adults_race,e.race_narrative])
     desc=f"Student who identify {iden} and the adults they talk to about race"
     q="Which adults have made the most sense to you when discussing race/ racism, gender, sexuality, other identities?  What did they say or do that was impactful?"
     return render_template('survey/surveybyid.html',elist=elist,iden=iden,desc=desc,q=q)
@@ -145,11 +145,11 @@ def surveyRaceQByIds(iden):
 def surveyRaceQByAdults(adult):
     adult = urllib.parse.unquote(adult)
     entries=Survey.objects()
-    elist = [['Email','Race Adults','Intersectionality','Race Narrative']]
+    elist = [['Full Name','Race Adults','Intersectionality','Race Narrative']]
 
     for e in entries:
         if adult in e.adults_race:
-            elist.append([e.email,e.adults_race,e.identity_list,e.race_narrative])
+            elist.append([f"{e.full_name} ({e.grade})",e.adults_race,e.identity_list,e.race_narrative])
     desc=f"Students who talk to {adult} about race."
     q="Which adults have made the most sense to you when discussing race/ racism, gender, sexuality, other identities?  What did they say or do that was impactful?"
     return render_template('survey/surveybyadult.html',elist=elist,adult=adult,desc=desc,q=q)
@@ -278,11 +278,11 @@ def surveyRace():
 def surveyExpertQByAdults(adult):
     adult = urllib.parse.unquote(adult)
     entries=Survey.objects()
-    elist = [['Email','Expert Adults','Intersectionality','Expert Narrative']]
+    elist = [['Full Name','Expert Adults','Intersectionality','Expert Narrative']]
 
     for e in entries:
         if adult in e.adults_expert:
-            elist.append([e.email,e.adults_expert,e.identity_list,e.expert_narrative])
+            elist.append([f"{e.full_name} ({e.grade})",e.adults_expert,e.identity_list,e.expert_narrative])
     desc=f"Students that see {adult} as an expert."
     q="Is there an adult at CCPA who the other adults should learn from around supporting your identity or safety?  Who is that person and what should the other adults learn?"
     return render_template('survey/surveybyadult.html',elist=elist,adult=adult, desc=desc,q=q)
