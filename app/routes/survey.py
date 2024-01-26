@@ -14,48 +14,6 @@ import datetime as dt
 import pandas as pd
 import urllib
 
-@app.route('/survey/expert/<sid>',methods=['POST','GET'])
-@login_required
-@require_role(role="teacher")
-def surveyRaceEdit(sid):
-    entries = Survey.objects(pk=sid)
-    entries2 = Survey.objects()
-    form = TxtAreaForm()
-    if form.validate_on_submit():
-        tempList = form.ta.data.split(',')
-        for i,item in enumerate(tempList):
-            tempList[i] = item.strip()
-        entryEdit = entries[0]
-        entryEdit.update(
-            adults_expert = tempList
-        )
-
-    form.ta.process_data(entries[0].adults_expert)
-
-    return render_template('survey/dataclean.html',entries=entries, entries2=entries2, form=form)
-
-
-@app.route('/survey/expert', methods=['GET','POST'])
-@login_required
-@require_role(role="teacher")
-def surveyRace():
-    query = Q(adults_expert__exists = True) & Q(adults_expert__size = 0)
-    entries = Survey.objects(query)
-    query2 = Q(adults_expert__exists = True) & Q(adults_expert__0__exists = True)
-    entries2 = Survey.objects(query2)
-    form = TxtAreaForm()
-    if form.validate_on_submit():
-        tempList = form.ta.data.split(',')
-        for i,item in enumerate(tempList):
-            tempList[i] = item.strip()
-        entryEdit = entries[0]
-        entryEdit.update(
-            adults_expert = tempList
-        )
-
-    form.ta.process_data('')
-
-    return render_template('survey/dataclean.html',entries=entries, entries2=entries2, form=form)
 
 @app.route('/survey')
 @login_required
@@ -76,7 +34,8 @@ def surveyQByIds(iden):
         if iden in e.identity_list:
             elist.append([e.email,e.identity_list,e.adults_safety_list,e.safety_narrative])
     desc=f"Student who identify {iden} and the adults that make them feel safe"
-    return render_template('survey/surveybyid.html',elist=elist,iden=iden,desc=desc)
+    q = "Which adults at CCPA make you feel the most safe, and what do they do to make you feel safe?"
+    return render_template('survey/surveybyid.html',elist=elist,iden=iden,desc=desc,q=q)
     
 @app.route('/survey/qbyadults/<adult>')
 @login_required
@@ -90,7 +49,8 @@ def surveyQByAdults(adult):
         if adult in e.adults_safety_list:
             elist.append([e.email,e.adults_safety_list,e.identity_list,e.safety_narrative])
     desc=f"Students that say {adult} makes them feel safe"
-    return render_template('survey/surveybyadult.html',elist=elist,adult=adult,desc=desc)
+    q="Which adults at CCPA make you feel the most safe, and what do they do to make you feel safe?"
+    return render_template('survey/surveybyadult.html',elist=elist,adult=adult,desc=desc,q=q)
 
 @app.route('/survey/safety/adult/int')
 @login_required
@@ -176,7 +136,8 @@ def surveyRaceQByIds(iden):
         if iden in e.identity_list:
             elist.append([e.email,e.identity_list,e.adults_race,e.race_narrative])
     desc=f"Student who identify {iden} and the adults they talk to about race"
-    return render_template('survey/surveybyid.html',elist=elist,iden=iden,desc=desc)
+    q="Which adults have made the most sense to you when discussing race/ racism, gender, sexuality, other identities?  What did they say or do that was impactful?"
+    return render_template('survey/surveybyid.html',elist=elist,iden=iden,desc=desc,q=q)
     
 @app.route('/survey/raceqbyadults/<adult>')
 @login_required
@@ -190,7 +151,8 @@ def surveyRaceQByAdults(adult):
         if adult in e.adults_race:
             elist.append([e.email,e.adults_race,e.identity_list,e.race_narrative])
     desc=f"Students who talk to {adult} about race."
-    return render_template('survey/surveybyadult.html',elist=elist,adult=adult,desc=desc)
+    q="Which adults have made the most sense to you when discussing race/ racism, gender, sexuality, other identities?  What did they say or do that was impactful?"
+    return render_template('survey/surveybyadult.html',elist=elist,adult=adult,desc=desc,q=q)
 
 @app.route('/survey/race/adult/int')
 @login_required
@@ -266,6 +228,50 @@ def surveyRaceIntSafety():
 
 ### Expert ###
 
+
+@app.route('/survey/expert/<sid>',methods=['POST','GET'])
+@login_required
+@require_role(role="teacher")
+def surveyRaceEdit(sid):
+    entries = Survey.objects(pk=sid)
+    entries2 = Survey.objects()
+    form = TxtAreaForm()
+    if form.validate_on_submit():
+        tempList = form.ta.data.split(',')
+        for i,item in enumerate(tempList):
+            tempList[i] = item.strip()
+        entryEdit = entries[0]
+        entryEdit.update(
+            adults_expert = tempList
+        )
+
+    form.ta.process_data(entries[0].adults_expert)
+
+    return render_template('survey/dataclean.html',entries=entries, entries2=entries2, form=form)
+
+
+@app.route('/survey/expert', methods=['GET','POST'])
+@login_required
+@require_role(role="teacher")
+def surveyRace():
+    query = Q(adults_expert__exists = True) & Q(adults_expert__size = 0)
+    entries = Survey.objects(query)
+    query2 = Q(adults_expert__exists = True) & Q(adults_expert__0__exists = True)
+    entries2 = Survey.objects(query2)
+    form = TxtAreaForm()
+    if form.validate_on_submit():
+        tempList = form.ta.data.split(',')
+        for i,item in enumerate(tempList):
+            tempList[i] = item.strip()
+        entryEdit = entries[0]
+        entryEdit.update(
+            adults_expert = tempList
+        )
+
+    form.ta.process_data('')
+
+    return render_template('survey/dataclean.html',entries=entries, entries2=entries2, form=form)
+
 @app.route('/survey/expertqbyadults/<adult>')
 @login_required
 @require_role(role="teacher")
@@ -278,7 +284,8 @@ def surveyExpertQByAdults(adult):
         if adult in e.adults_expert:
             elist.append([e.email,e.adults_expert,e.identity_list,e.expert_narrative])
     desc=f"Students that see {adult} as an expert."
-    return render_template('survey/surveybyadult.html',elist=elist,adult=adult, desc=desc)
+    q="Is there an adult at CCPA who the other adults should learn from around supporting your identity or safety?  Who is that person and what should the other adults learn?"
+    return render_template('survey/surveybyadult.html',elist=elist,adult=adult, desc=desc,q=q)
 
 @app.route('/survey/expert/adult/int')
 @login_required
