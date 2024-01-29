@@ -244,7 +244,7 @@ def updatePLaylist():
             flash('had to refresh your spotify credientials. Try again!')
             return redirect(url_for('spotify'))
 
-        im = Image.open('app/static/lion.jpg')
+        im = Image.open('app/static/lion.png')
         data = io.BytesIO()
         im.save(data, "jpeg")
         encoded_img_data = base64.b64encode(data.getvalue())

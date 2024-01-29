@@ -9,5 +9,5 @@ def index():
 
 @app.route('/alumnimap')
 @login_required
-def alimnimap():
+def alumnimap():
     return render_template("alumnimap.html")
