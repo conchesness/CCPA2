@@ -29,8 +29,8 @@ def setroles():
 @login_required
 @require_role(role='admin')
 def addrole(roleName):
-    role(
-        name=rolename
+    Role(
+        name=roleName
     ).save()
     flash (f"{roleName} role created.")
     roles = Role.objects()

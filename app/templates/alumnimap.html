@@ -2,10 +2,11 @@
 
 {% extends 'base.html' %}
 
-{% block body %}
-
+{% block body_no_container %}
 <a href="https://ccpa-ousd.github.io/alumni-map/" target="_blank">Open in new window</a>
 
-<iframe src="https://ccpa-ousd.github.io/alumni-map/" height="800" width="100%" ></iframe>
+<div class="ratio ratio-4x3">
+    <iframe src="https://ccpa-ousd.github.io/alumni-map/"></iframe>
+</div>
 
 {% endblock %}

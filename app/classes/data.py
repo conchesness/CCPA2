@@ -16,11 +16,30 @@ from flask_login import UserMixin, current_user
 from mongoengine import Document, ListField, FileField, EmailField, StringField, IntField, DictField, EmbeddedDocumentListField, EmbeddedDocument
 from mongoengine import ReferenceField, DateTimeField, BooleanField, FloatField, ObjectIdField,CASCADE
 import datetime as dt
-#import jwt
 from time import time
 from bson.objectid import ObjectId
 from flask_security import RoleMixin
 from functools import wraps
+
+class AlumniAddress(EmbeddedDocument):
+    alum = ReferenceField('User') 
+    createdate = DateTimeField(default=dt.datetime.utcnow())
+    modifydate = DateTimeField()
+    modifiedby = ReferenceField('User')
+    name = StringField()
+    streetAddress = StringField()
+    city = StringField()
+    state = StringField()
+    zipcode = StringField()
+    description = StringField()
+    lat = FloatField()
+    lon = FloatField()
+    isedu = BooleanField()
+    iscurrent = BooleanField()
+    
+    meta = {
+        'ordering': ['-createdate']
+    }
 
 class User(UserMixin, Document):
     createdate = DateTimeField(default=dt.datetime.utcnow())
@@ -42,8 +61,10 @@ class User(UserMixin, Document):
     tdivision = StringField()
     school = StringField()
     pronouns = StringField()
+
+    alumniaddresses = (EmbeddedDocumentListField('AlumniAddress'))
     
-    # Below Is teacher only data
+    # teacher only data
     teacher_number = IntField(sparse=True,unique=True)
     troom_number = StringField()
     tdescription = StringField()
@@ -51,7 +72,7 @@ class User(UserMixin, Document):
     tdepartment = StringField()
     troom_phone = IntField()
 
-    # Self-rating
+    # teacher Self-rating
     late_work = IntField()
     late_work_policy = StringField()
     feedback = IntField()
