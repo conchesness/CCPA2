@@ -11,7 +11,8 @@ from app.classes.data import require_role, Survey
 from app.classes.forms import TxtAreaForm
 from flask_login import login_required
 import datetime as dt
-import pandas as pd
+from pandas import read_csv
+
 import urllib
 
 
@@ -343,7 +344,7 @@ def surveyExpertAdultInt():
 # @login_required
 # @require_role(role="teacher")
 # def import_survey():
-#     surveyDF = pd.read_csv('./app/static/survey.csv', quotechar='"')
+#     surveyDF = read_csv('./app/static/survey.csv', quotechar='"')
 #     surveyDict = surveyDF.to_dict('index')
 #     num = len(surveyDict)
 #     for i,row in enumerate(surveyDict):

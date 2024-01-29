@@ -6,7 +6,7 @@ from app.classes.data import User, require_role, Role
 from app.classes.forms import ProfileForm
 from flask_login import current_user
 import requests
-import pandas as pd
+from pandas import read_csv
 import mongoengine.errors
 
 # These routes and functions are for accessing and editing user profiles.
@@ -57,7 +57,7 @@ def profileEdit():
 
 @app.route("/checknames")
 def checknames():
-    stusDF = pd.read_csv('./app/static/names.csv', quotechar='"')
+    stusDF = read_csv('./app/static/names.csv', quotechar='"')
     stusDict = stusDF.to_dict('index')
     num = len(stusDict)
     sheet = ''
@@ -84,7 +84,7 @@ def checknames():
 
 @app.route("/importusers")
 def importusers():
-    stusDF = pd.read_csv('./app/static/allStudentsCCPA.csv', quotechar='"')
+    stusDF = read_csv('./app/static/allStudentsCCPA.csv', quotechar='"')
     stusDict = stusDF.to_dict('index')
     num = len(stusDict)
     stuRole = Role.objects.get(name='student')
