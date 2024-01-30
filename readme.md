@@ -5,4 +5,4 @@ This template requires credentials from:
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/conchesness/CCPA2)
 
-https://deploy.cloud.run/?git_repo=https://github.com/conchesness/CCPA
+https://deploy.cloud.run/?git_repo=https://github.com/conchesness/CCPA2
