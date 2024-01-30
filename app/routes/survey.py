@@ -11,7 +11,7 @@ from app.classes.data import require_role, Survey
 from app.classes.forms import TxtAreaForm
 from flask_login import login_required
 import datetime as dt
-from pandas import read_csv
+# from pandas import read_csv
 
 import urllib
 
