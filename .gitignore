@@ -136,3 +136,4 @@ secretsOLD.py
 .vercel
 local.py
 zscripts.py
+*.pem
