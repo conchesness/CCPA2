@@ -3,6 +3,7 @@ Flask~=2.3.3
 Flask-Login~=0.6.2
 Flask-Moment~=1.0.5
 Flask-Security-Too~=5.3.2
+gunicorn~=21.2.0
 mongoengine~=0.27.0
 oauthlib~=3.2.2
 # pandas~=2.1.4
