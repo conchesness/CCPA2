@@ -1,5 +1,4 @@
 from app import app
-import pandas as pd
 import mongoengine.errors
 from flask import render_template, flash, redirect, url_for, session
 from markupsafe import Markup
@@ -15,7 +14,7 @@ import json
 def resultsToCSV():
     courses = Courses.objects()
     coursesDict = json.loads(courses.to_json())
-    tcDF = pd.DataFrame(coursesDict)
+    tcDF = DataFrame(coursesDict)
     tcDF.to_csv('tc.csv')
 
     return render_template('index.html')
