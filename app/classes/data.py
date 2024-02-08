@@ -21,21 +21,40 @@ from bson.objectid import ObjectId
 from flask_security import RoleMixin
 from functools import wraps
 
-class AlumniAddress(EmbeddedDocument):
-    alum = ReferenceField('User') 
+class College (Document):
+    unitid = IntField()
+    coltype = StringField()
+    name = StringField()
+    street = StringField()
+    city = StringField()
+    state = StringField()
+    zipcode = StringField()
+    lat = FloatField()
+    lon = FloatField()
+    locale = StringField()
+
+class CollegeEnrollment(Document):
+    college = ReferenceField('College')
+    student = ReferenceField('User')
+    grad_year = IntField()
+
+class Address(EmbeddedDocument):
+    oid = ObjectIdField(default=ObjectId())
     createdate = DateTimeField(default=dt.datetime.utcnow())
-    modifydate = DateTimeField()
+    modifydate = DateTimeField(default=dt.datetime.utcnow())
     modifiedby = ReferenceField('User')
     name = StringField()
     streetAddress = StringField()
     city = StringField()
     state = StringField()
-    zipcode = StringField()
+    zipcode = IntField()
     description = StringField()
     lat = FloatField()
     lon = FloatField()
-    isedu = BooleanField()
+    # College, Work, Home
+    addresstype = StringField()
     iscurrent = BooleanField()
+    gradyear = IntField()
     
     meta = {
         'ordering': ['-createdate']
@@ -62,7 +81,7 @@ class User(UserMixin, Document):
     school = StringField()
     pronouns = StringField()
 
-    alumniaddresses = (EmbeddedDocumentListField('AlumniAddress'))
+    addresses = (EmbeddedDocumentListField('Address'))
     
     # teacher only data
     teacher_number = IntField(sparse=True,unique=True)

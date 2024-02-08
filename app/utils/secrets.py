@@ -12,6 +12,3 @@ def getSecrets():
         'SPOTIFY_CLIENT_SECRET':os.environ.get('spotify_client_secret'),
         }
     return secrets
-
-
-    #        'MONGO_HOST':'mongodb+srv://admin:bu11d0gz@cluster0.8m0v1.mongodb.net',

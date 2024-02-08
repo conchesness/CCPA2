@@ -2,23 +2,19 @@ from app import app
 from flask_login.utils import login_required
 from flask_login import current_user
 from flask import render_template, redirect, flash, url_for
-from app.classes.data import User, require_role, Role
+from app.classes.data import User, require_role, Role, CollegeEnrollment
 from app.classes.forms import ProfileForm
 from flask_login import current_user
 import requests
 # from pandas import read_csv
 import mongoengine.errors
 
-# These routes and functions are for accessing and editing user profiles.
 
-# The first line is what listens for the user to type 'myprofile'
 @app.route('/myprofile')
-# This line tells the user that they cannot access this without being loggedin
 @login_required
-# This is the function that is run when the route is triggered
 def myProfile():
-    # This sends the user to their profile page which renders the 'profilemy.html' template
-    return render_template('profilemy.html')
+    colleges = CollegeEnrollment.objects(student=current_user)
+    return render_template('profilemy.html',colleges=colleges)
 
 # This is the route for editing a profile
 # the methods part is required if you are using a form 

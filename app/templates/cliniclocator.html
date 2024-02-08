@@ -1,39 +1,206 @@
 {% extends 'base.html' %}
 
-{% block body %}
+{% block body_no_container %}
 <!--Maps stylesheet-->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.8.0-beta.1/leaflet.css" />
 <!--this is where the javascript will insert the map-->
-<div id="map" style="height: 600px;"></div>
+<div id="map" class="ratio ratio-16x9"></div>
 <!--link the javascript library-->
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.8.0-beta.1/leaflet.js"></script>
+<script src='https://npmcdn.com/csv2geojson@latest/csv2geojson.js'></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
 <script type="text/javascript">
-    // The first parameter are the coordinates of the center of the map
-    // The second parameter is the zoom level
+
+    // // This focuses the map on loadstyle="height: 600px;" 
+    // // The first parameter are the coordinates of the center of the map
+    // // The second parameter is the zoom level
     var map = L.map('map').setView([37.8323039, -122.2575883], 13);
-    
+    accessToken = 'pk.eyJ1IjoiZG9tbGV0IiwiYSI6ImNsaTN5MXhseTA0bWMzZHBoNTlnaG1hYmUifQ.9IpTpyptAxhC6ZoUqKCd9w';
+
+    datasets = [
+      { 'name': 'schools', 'url': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRtFnRSJ__Rne8FH9igV93l42bsQE6PhFijwoQ4gimr5l5vlQJnljexLXOK4deup-0hLF0B-tDLA77u/pub?gid=1593214570&single=true&output=csv' },
+      // { 'name': 'people', 'url': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRtFnRSJ__Rne8FH9igV93l42bsQE6PhFijwoQ4gimr5l5vlQJnljexLXOK4deup-0hLF0B-tDLA77u/pub?gid=435305116&single=true&output=csv' },
+    ]
+    categories =
+    {
+      // School groups
+      'uc': { 'color': '#002A56', 'outline': 'black', 'source': 'schools' },
+      'csu': { 'color': '#E61A37', 'outline': 'black', 'source': 'schools' },
+      'ccc': { 'color': 'blue', 'outline': 'black', 'source': 'schools' },
+      'hbcu': { 'color': 'aqua', 'outline': 'black', 'source': 'schools' },
+      'ncaa_d1': { 'color': '#0097D8', 'outline': 'white', 'source': 'schools' },
+      'ncaa_d2': { 'color': '#0097D8', 'outline': 'white', 'source': 'schools' },
+      'ncaa_d3': { 'color': '#0097D8', 'outline': 'white', 'source': 'schools' },
+      // locations
+      'us': { 'color': '#9B59B6', 'outline': 'black', 'source': 'schools' },
+      'california': { 'color': '#E67E22', 'outline': 'black', 'source': 'schools' },
+      'mexico': { 'color': '#2ECC71', 'outline': 'black', 'source': 'schools' },
+      'canada': { 'color': '#E65722', 'outline': 'black', 'source': 'schools' },
+      'global': { 'color': '#F2CA27', 'outline': 'black', 'source': 'schools' },
+      // 'us-non-california-public': { 'color': 'teal', 'outline': 'black', 'source': 'schools' },
+      // 'us-non-california-private': { 'color': 'orange', 'outline': 'black', 'source': 'schools' },
+      'ccpa_2023': { 'color': '#006000', 'outline': 'gold', 'source': 'people' }, // green
+      'ccpa_2022': { 'color': '#006000', 'outline': 'gold', 'source': 'people' }, // green
+      'ccpa_staff': { 'color': 'gold', 'outline': '#006000', 'source': 'people' }, // green
+      // Transit
+      'bart_routes': { 'color': '', 'outline': '', 'source': 'map_style' },
+      'bart_stops': { 'color': '', 'outline': '', 'source': 'map_style' },
+      'caltrain_routes': { 'color': '', 'outline': '', 'source': 'map_style' },
+      'caltrain_stops': { 'color': '', 'outline': '', 'source': 'map_style' },
+      'amtrak_routes': { 'color': '', 'outline': '', 'source': 'map_style' },
+      'amtrak_stops': { 'color': '', 'outline': '', 'source': 'map_style' },
+    }
+    // Create an array of all the categories above:
+    let categoryList = [];
+    for (var key in categories) {
+      categoryList.push(key)
+    }
+
     // {s}, {z}, {x} and {y} are placeholders for map tiles
     // {x} and {y} are the x/y of where you are on the map
     // {z} is the zoom level
     // {s} is the subdomain of cartodb
     // 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png'
     // 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-    var layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    var alumLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
     });
     
     // Now add the layer onto the map
-    map.addLayer(layer);
+    map.addLayer(alumLayer);
 
     // It even opens up a popup when you click it!
-    {% for clinic in clinics %}
-        {% if clinic.lat and clinic.lon %}
+    {% for alum in alumni %}
+        {% if alum.lat and alum.lon %}
             // Add your fields to the ppup on the next line.
-            L.marker(['{{clinic.lat}}', '{{clinic.lon}}']).addTo(map).bindPopup("<strong>{{clinic.name}}<br>{{clinic.streetAddress}}<br>{{clinic.city}},{{clinic.state}}  {{clinic.zipcode}}<br>desc: {{clinic.description}}</strong>")
+            L.marker(['{{alum.lat}}', '{{alum.lon}}']).addTo(map).bindPopup("<strong>{{alum.name}}<br>{{alum.streetAddress}}<br>{{alum.city}},{{alum.state}}  {{alum.zipcode}}<br>desc: {{alum.description}}</strong>")
         {% endif %}
     {% endfor %}
     // this is a way to add a marker that ALWAYS shows up.
-    L.marker([37.8323039, -122.2575883]).addTo(map).bindPopup("<strong>Oakland Tech</strong>").openPopup();
+    const blueIcon = new L.Icon({
+      iconUrl:
+        "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png",
+      shadowUrl:
+        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });
+    const redIcon = new L.Icon({
+      iconUrl:
+        "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png",
+      shadowUrl:
+        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });
+    const ucIcon = new L.Icon({
+      iconUrl:
+        "https://brand.universityofcalifornia.edu/assets/images/guidelines/uc-wordmark-blue-official.png",
+      shadowUrl:
+        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+      iconSize: [50, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [50, 41]
+    });
+    const cccIcon = new L.Icon({
+      iconUrl:
+        "https://3.files.edl.io/b9f3/21/12/14/224436-cffea7b1-3a7d-4398-ba41-fe2fb3143b5c.png",
+      shadowUrl:
+        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+      iconSize: [70, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [70, 41]
+    });
+    const csuIcon = new L.Icon({
+      iconUrl:
+        "https://www.calstate.edu/csu-system/csu-branding-standards/PublishingImages/logos/stacked.jpg",
+      shadowUrl:
+        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+      iconSize: [70, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [70, 41]
+    });
+    const schoolIcon = new L.Icon({
+      iconUrl:
+        "{{ url_for('static', filename='school.png') }}",
+      shadowUrl:
+        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+      iconSize: [35, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });
+
+    for (let i = 0; i < datasets.length; i++) {
+        $.ajax({
+        type: "GET",
+          url: datasets[i].url,
+          dataType: "text",
+          success: function(csvdata) {
+            csv2geojson.csv2geojson(csvdata, {
+              latfield: 'latitude',
+              lonfield: 'longitude',
+              delimiter: ','
+            }, function (err, data) {
+                for (var school in data.features) {
+                    const sys_ac = data.features[school]['properties']['system_acronym']
+                    if (sys_ac == "CCC"){
+                        icon = cccIcon;
+                    } else if (sys_ac == "UC") {
+                        icon = ucIcon;
+                    } else if ( sys_ac == "CSU" ) {
+                        icon = csuIcon;
+                    } else {
+                        icon = schoolIcon;
+                    }
+                    const school_name = data.features[school]['properties']['name']
+                    const lat=data.features[school]['geometry']['coordinates'][0]
+                    const lon=data.features[school]['geometry']['coordinates'][1]
+                    L.marker([lon,lat],{icon:icon}).addTo(map).bindPopup("<strong>"+school_name+"\n"+sys_ac+"</strong>")
+                }
+            });
+          }
+        });
+    }
+    L.marker([37.8323039, -122.2575883]).addTo(map).bindPopup("<strong>Oakland Tech</strong>").openPopup();   
+
+
+    function forwardGeocoder(query) {
+      const matchingFeatures = [];
+      for (const feature of people) {
+        if (
+          feature.properties.name
+            .toLowerCase()
+            .includes(query.toLowerCase())
+        ) {
+          feature['place_name'] = `🦁 ${feature.properties.name}`;
+          feature['center'] = feature.geometry.coordinates;
+          matchingFeatures.push(feature);
+        }
+      }
+      return matchingFeatures;
+    }
+
+    map.addControl(
+      new MapboxGeocoder({
+        accessToken: accessToken,
+        localGeocoder: forwardGeocoder,
+        mapboxgl: mapboxgl,
+        collapsed: true,
+        proximity: { latitude: 37.783520, longitude: -122.219355 },
+        clearAndBlurOnEsc: true
+      }), 'top-left'
+    );
 
 
 </script>

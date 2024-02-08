@@ -15,19 +15,38 @@
             <img class="img-thumbnail" width = "100" src="/static/lion.png">
         {% endif %} 
     </div>
-    <div class="col display-5">
+    <div class="col display-6">
         {% if current_user.fname and current_user.lname %}
             Name: {{current_user.fname}}  {{current_user.lname}} <br>
         {% else %}
             Google User Name: {{current_user.gname}} <br>
         {% endif %}
-        Email: {{current_user.email}} <br>
-        Roles: 
+        Email: {{current_user.email}} <br> <br>
+        <h1 class="display-5">Roles:</h1> 
         {% for role in current_user.roles %}
         <ul>
             <li>{{role.name.capitalize()}}</li>
         </ul>
         {% endfor %}
+        {#
+            <h3>Addresses <a href="/address/new" class="btn btn-primary btn-sm" role="button">New Address</a></h3>
+            {% for a in current_user.addresses %}
+                <a href="/address/delete/{{a.oid}}"><img width="40" src="static/delete.png"></a>
+                {{a.addresstype}} <br>
+                {{a.name}} <br>
+                {{a.streetAddress}} <br>
+                {{a.city}} {{a.state}} {{a.zipcode}} <br>
+            {% endfor %}
+        #} <br>
+            <h3 class="display-5">Colleges <a href="/college/new" class="btn btn-primary btn-sm" role="button">New College</a> </h3>
+            <ul>
+            {% for college in colleges %}
+                <li>
+                    {{ college.college.name }} <br>
+                    Graduation Year: {{ college.grad_year }}
+                </li>
+            {% endfor %}
+            </ul>
 
     </div>
 </div>

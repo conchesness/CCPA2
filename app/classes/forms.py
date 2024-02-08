@@ -5,7 +5,8 @@
 from flask_wtf import FlaskForm
 import mongoengine.errors
 from wtforms.validators import URL, Email, DataRequired, Optional, InputRequired
-from wtforms import StringField, SubmitField, TextAreaField, IntegerField, SelectField, FileField, BooleanField, URLField, ColorField, IntegerRangeField
+from wtforms import StringField, SubmitField, TextAreaField, IntegerField, SelectField, FileField
+from wtforms import BooleanField, URLField, ColorField, IntegerRangeField, DateTimeLocalField
 
 class QRForm(FlaskForm):
     QRText = StringField()
@@ -64,8 +65,6 @@ class ProfileForm(FlaskForm):
     pronouns = StringField('Pronouns')
     fname = StringField('First Name', validators=[DataRequired()])
     lname = StringField('Last Name', validators=[DataRequired()]) 
-    #role = SelectField('Role',choices=[("Teacher","Teacher"),("Student","Student")])
-    #school = SelectField('School',choices=[("Oakland Technical High School","Oakland Technical High School")])
     image = FileField("Image") 
     submit = SubmitField('Post')
 
@@ -144,3 +143,18 @@ class ObstacleForm(FlaskForm):
 class TxtAreaForm(FlaskForm):
     ta = StringField()
     submit = SubmitField('Save')
+
+class AddressForm(FlaskForm):
+    name = StringField()
+    streetAddress = StringField()
+    city = StringField()
+    state = StringField()
+    zipcode = IntegerField()
+    description = TextAreaField()
+    addresstype = SelectField(choices=[('','---'),('Work','Work'),('Residence','Residence')])
+    submit = SubmitField('Save')
+
+class CollegeForm(FlaskForm):
+    name = StringField("Name")
+    gradyear = IntegerField("Graduation Year")
+    submit = SubmitField("Save")
