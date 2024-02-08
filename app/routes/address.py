@@ -105,6 +105,22 @@ def collegeNew(uid=None):
         
     return render_template('addresses/new_college_form.html',form=form, collegeNames=collegeNames)
 
+@app.route('/college/delete/<ceid>')
+def collegeEnrollmentDelete(ceid):
+    ce = CollegeEnrollment.objects.get(pk=ceid)
+
+    if current_user == ce.student or current_user.has_role('admin') :
+        ce.delete()
+        flash("The College Enrollment has been deleted.")
+
+    else:
+        flash('You do not have the right privleges to delete this college enrollment.')
+    
+    return redirect(url_for('myProfile'))
+
+
+
+
 @app.route('/address/new/<uid>',methods=['GET','POST'])
 @app.route('/address/new',methods=['GET','POST'])
 @login_required

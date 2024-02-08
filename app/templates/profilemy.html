@@ -42,12 +42,11 @@
             <ul>
             {% for college in colleges %}
                 <li>
-                    {{ college.college.name }} <br>
+                    <a href="/college/delete/{{college.id}}"><img width="40" src="static/delete.png"></li><a> {{ college.college.name }} <br>
                     Graduation Year: {{ college.grad_year }}
                 </li>
             {% endfor %}
             </ul>
-
     </div>
 </div>
 <br>
