@@ -220,7 +220,7 @@
     var alumniLayerGroup = L.layerGroup([])
     {% for e in studentEnrollments %}
     {% if e.college.lat and e.college.lon %}
-          L.marker(['{{e.college.lat}}', '{{e.college.lon}}'],{title:'{{e.student.fname}} {{e.student.lname}} ({{e.college.name}})',icon:alumniIcon}).addTo(alumniLayerGroup).bindPopup("<strong>'{{e.student.fname}} {{e.student.lname}} {{e.grad_year}} ({{e.college.name}})'<br>{{e.college.city}},{{e.college.state}}<br><a href='https://nces.ed.gov/ipeds/datacenter/InstitutionProfile.aspx?unitId={{cecollege.unitid}}'>link</a></strong>")
+          L.marker(['{{e.college.lat}}', '{{e.college.lon}}'],{title:'{{e.student.fname}} {{e.student.lname}} ({{e.college.name}})',icon:alumniIcon}).addTo(alumniLayerGroup).bindPopup("<strong>'{{e.student.fname}} {{e.student.lname}} {{e.grad_year}} ({{e.college.name}})'<br>{{e.college.city}},{{e.college.state}}<br><a href='https://nces.ed.gov/ipeds/datacenter/InstitutionProfile.aspx?unitId={{e.college.unitid}}'>link</a></strong>")
       {% endif %}
     {% endfor %}
 
