@@ -10,7 +10,7 @@ from flask_login import login_required
 from mongoengine import Q
 import datetime as dt
 from bson import ObjectId
-from pandas import read_csv
+# pandas import read_csv
 
 def getCollegeNames():
     colleges=College.objects()
@@ -155,18 +155,18 @@ def address_delete(aid,uid=None):
     return redirect(url_for('myProfile'))
 
 
-@app.route("/importcolleges")
-def importcolleges():
-    colsDF = read_csv('./app/static/ccc.csv', quotechar='"')
-    colsDict = colsDF.to_dict('index')
-    num = len(colsDict)
-    for i,row in enumerate(colsDict):
-        row=colsDict[row]
-        editCol = College.objects.get(unitid=row['unitid'])
-        editCol.update(
-            coltype=row['coltype']
-        )
+# @app.route("/importcolleges")
+# def importcolleges():
+#     colsDF = read_csv('./app/static/ccc.csv', quotechar='"')
+#     colsDict = colsDF.to_dict('index')
+#     num = len(colsDict)
+#     for i,row in enumerate(colsDict):
+#         row=colsDict[row]
+#         editCol = College.objects.get(unitid=row['unitid'])
+#         editCol.update(
+#             coltype=row['coltype']
+#         )
 
-        print(f"{i}/{num}")
+#         print(f"{i}/{num}")
 
-    return render_template("index.html")
+#     return render_template("index.html")
