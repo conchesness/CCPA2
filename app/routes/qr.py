@@ -3,12 +3,12 @@ from app.classes.forms import QRForm
 #from .users import credentials_to_dict
 from flask import render_template, redirect, session, flash, url_for, Markup
 from flask_login import current_user, login_required
-from time import sleep
-from os import path
-from PIL import Image
-from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
-import matplotlib.pyplot as plt
-import matplotlib
+# from time import sleep
+# from os import path
+# from PIL import Image
+# from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
+# import matplotlib.pyplot as plt
+# import matplotlib
 import base64
 import io
 import segno
