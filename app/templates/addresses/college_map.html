@@ -10,7 +10,7 @@
 <!--link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css"-->
 
 <!--this is where the javascript will insert the map-->
-<div id="map" class="mx-3 ratio ratio-21x9"></div>
+<div id="map" class="w-auto mx-3 ratio ratio-21x9"></div>
 
 <!--link the javascript library-->
 <!--script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script-->
@@ -26,11 +26,11 @@
     // // The second parameter is the zoom level
     // var map = L.map('map').setView([37.7614926, -122.1929292], 10);
 
-    var schools = ""
-    datasets = [
-      { 'name': 'schools', 'url': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRtFnRSJ__Rne8FH9igV93l42bsQE6PhFijwoQ4gimr5l5vlQJnljexLXOK4deup-0hLF0B-tDLA77u/pub?gid=1593214570&single=true&output=csv' },
-      // { 'name': 'people', 'url': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRtFnRSJ__Rne8FH9igV93l42bsQE6PhFijwoQ4gimr5l5vlQJnljexLXOK4deup-0hLF0B-tDLA77u/pub?gid=435305116&single=true&output=csv' },
-    ]
+    // var schools = ""
+    // datasets = [
+    //   { 'name': 'schools', 'url': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRtFnRSJ__Rne8FH9igV93l42bsQE6PhFijwoQ4gimr5l5vlQJnljexLXOK4deup-0hLF0B-tDLA77u/pub?gid=1593214570&single=true&output=csv' },
+    //   // { 'name': 'people', 'url': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRtFnRSJ__Rne8FH9igV93l42bsQE6PhFijwoQ4gimr5l5vlQJnljexLXOK4deup-0hLF0B-tDLA77u/pub?gid=435305116&single=true&output=csv' },
+    // ]
 
     // {s}, {z}, {x} and {y} are placeholders for map tiles
     // {x} and {y} are the x/y of where you are on the map
@@ -215,7 +215,7 @@
       {% endif %}
     {% endfor %}
 
-    L.marker([37.7614926,-122.1929292], { title: 'CCPA' ,icon:ccpaIcon}).addTo(staffLayerGroup).bindPopup("<stron>CCPA</strong>"); 
+    L.marker([37.7614926,-122.1929292], { title: 'CCPA' ,icon:ccpaIcon,forceZIndex: 10000}).addTo(staffLayerGroup).bindPopup("<stron>CCPA</strong>"); 
 
     var alumniLayerGroup = L.layerGroup([])
     {% for e in studentEnrollments %}
