@@ -167,7 +167,7 @@
     {% for c in ccc %}
       {% if c.lat and c.lon %}
           // Add your fields to the ppup on the next line.
-          L.marker(['{{c.lat}}', '{{c.lon}}'],{title:'{{c.name}}',icon:cccIcon}).addTo(cccLayerGroup).bindPopup("<strong>{{c.name}}<br>{{c.streetAddress}}<br>{{c.city}},{{c.state}}  {{c.zipcode}}<br><a href='https://nces.ed.gov/ipeds/datacenter/InstitutionProfile.aspx?unitId={{c.unitid}}'>link</a></strong>")
+          L.marker(['{{c.lat}}', '{{c.lon}}'],{title:'{{c.name}}',icon:cccIcon,forceZIndex: 3000}).addTo(cccLayerGroup).bindPopup("<strong>{{c.name}}<br>{{c.streetAddress}}<br>{{c.city}},{{c.state}}  {{c.zipcode}}<br><a href='https://nces.ed.gov/ipeds/datacenter/InstitutionProfile.aspx?unitId={{c.unitid}}'>link</a></strong>")
           {% endif %}
     {% endfor %}
 
@@ -176,7 +176,7 @@
     {% for c in cc %}
       {% if c.lat and c.lon %}
           // Add your fields to the ppup on the next line.
-          var newMarker = L.marker(['{{c.lat}}', '{{c.lon}}'],{title:'{{c.name}}',icon:tradeIcon}).bindPopup("<strong>{{c.name}}<br>{{c.streetAddress}}<br>{{c.city}},{{c.state}}  {{c.zipcode}}<br><a href='https://nces.ed.gov/ipeds/datacenter/InstitutionProfile.aspx?unitId={{c.unitid}}'>link</a></strong>")
+          var newMarker = L.marker(['{{c.lat}}', '{{c.lon}}'],{title:'{{c.name}}',icon:tradeIcon,forceZIndex: 1000}).bindPopup("<strong>{{c.name}}<br>{{c.streetAddress}}<br>{{c.city}},{{c.state}}  {{c.zipcode}}<br><a href='https://nces.ed.gov/ipeds/datacenter/InstitutionProfile.aspx?unitId={{c.unitid}}'>link</a></strong>")
           markersOtherCCs.addLayer(newMarker)  
         {% endif %}
     {% endfor %}
@@ -185,14 +185,14 @@
     {% for u in uc %}
       {% if u.lat and u.lon %}
           // Add your fields to the ppup on the next line.
-          L.marker(['{{u.lat}}', '{{u.lon}}'],{title:'{{u.name}}',icon:ucIcon}).addTo(ucLayerGroup).bindPopup("<strong>{{u.name}}<br>{{u.streetAddress}}<br>{{u.city}},{{u.state}}  {{u.zipcode}}<br><a href='https://nces.ed.gov/ipeds/datacenter/InstitutionProfile.aspx?unitId={{u.unitid}}'>link</a></strong>")
+          L.marker(['{{u.lat}}', '{{u.lon}}'],{title:'{{u.name}}',icon:ucIcon,forceZIndex: 5000}).addTo(ucLayerGroup).bindPopup("<strong>{{u.name}}<br>{{u.streetAddress}}<br>{{u.city}},{{u.state}}  {{u.zipcode}}<br><a href='https://nces.ed.gov/ipeds/datacenter/InstitutionProfile.aspx?unitId={{u.unitid}}'>link</a></strong>")
       {% endif %}
     {% endfor %}
 
     var csuLayerGroup = L.layerGroup([])
     {% for c in csu %}
       {% if c.lat and c.lon %}
-          L.marker(['{{c.lat}}', '{{c.lon}}'],{title:'{{c.name}}',icon:csuIcon}).addTo(csuLayerGroup).bindPopup("<strong>{{c.name}}<br>{{c.streetAddress}}<br>{{c.city}},{{c.state}}  {{c.zipcode}}<br><a href='https://nces.ed.gov/ipeds/datacenter/InstitutionProfile.aspx?unitId={{c.unitid}}'>link</a></strong>")
+          L.marker(['{{c.lat}}', '{{c.lon}}'],{title:'{{c.name}}',icon:csuIcon,forceZIndex: 4000}).addTo(csuLayerGroup).bindPopup("<strong>{{c.name}}<br>{{c.streetAddress}}<br>{{c.city}},{{c.state}}  {{c.zipcode}}<br><a href='https://nces.ed.gov/ipeds/datacenter/InstitutionProfile.aspx?unitId={{c.unitid}}'>link</a></strong>")
       {% endif %}
     {% endfor %}
 
@@ -201,7 +201,7 @@
     {% for o in other %}
       {% if o.lat and o.lon %}
           L.marker(['{{o.lat}}', '{{o.lon}}'],{title:'{{o.name}}',icon:noIcon}).addTo(otherLayerGroup)
-          newMarker = L.marker(['{{o.lat}}', '{{o.lon}}'],{title:'{{o.name}}',icon:schoolIcon}).bindPopup("<strong>{{o.name}}<br>{{o.streetAddress}}<br>{{o.city}},{{o.state}}  {{o.zipcode}}<br><a href='https://nces.ed.gov/ipeds/datacenter/InstitutionProfile.aspx?unitId={{o.unitid}}'>link</a></strong>")          
+          newMarker = L.marker(['{{o.lat}}', '{{o.lon}}'],{title:'{{o.name}}',icon:schoolIcon,forceZIndex:2000}).bindPopup("<strong>{{o.name}}<br>{{o.streetAddress}}<br>{{o.city}},{{o.state}}  {{o.zipcode}}<br><a href='https://nces.ed.gov/ipeds/datacenter/InstitutionProfile.aspx?unitId={{o.unitid}}'>link</a></strong>")          
           markersOtherColls.addLayer(newMarker)
           //newMarker.addTo(otherLayerGroup)
         {% endif %}
@@ -211,7 +211,7 @@
     var staffLayerGroup = L.layerGroup([])
     {% for e in teacherEnrollments %}
       {% if e.college.lat and e.college.lon %}
-          L.marker(['{{e.college.lat}}', '{{e.college.lon}}'],{title:'{{e.student.fname}} {{e.student.lname}} ({{e.college.name}})',icon:teacherIcon}).addTo(staffLayerGroup).bindPopup("<strong>'{{e.student.fname}} {{e.student.lname}} {{e.grad_year}} ({{e.college.name}})'<br>{{e.college.city}},{{e.college.state}}<br><a href='https://nces.ed.gov/ipeds/datacenter/InstitutionProfile.aspx?unitId={{e.college.unitid}}'>link</a></strong>")
+          L.marker(['{{e.college.lat}}', '{{e.college.lon}}'],{title:'{{e.student.fname}} {{e.student.lname}} ({{e.college.name}})',icon:teacherIcon,forceZIndex: 5000}).addTo(staffLayerGroup).bindPopup("<strong>'{{e.student.fname}} {{e.student.lname}} {{e.grad_year}} ({{e.college.name}})'<br>{{e.college.city}},{{e.college.state}}<br><a href='https://nces.ed.gov/ipeds/datacenter/InstitutionProfile.aspx?unitId={{e.college.unitid}}'>link</a></strong>")
       {% endif %}
     {% endfor %}
 
@@ -220,7 +220,7 @@
     var alumniLayerGroup = L.layerGroup([])
     {% for e in studentEnrollments %}
     {% if e.college.lat and e.college.lon %}
-          L.marker(['{{e.college.lat}}', '{{e.college.lon}}'],{title:'{{e.student.fname}} {{e.student.lname}} ({{e.college.name}})',icon:alumniIcon}).addTo(alumniLayerGroup).bindPopup("<strong>'{{e.student.fname}} {{e.student.lname}} {{e.grad_year}} ({{e.college.name}})'<br>{{e.college.city}},{{e.college.state}}<br><a href='https://nces.ed.gov/ipeds/datacenter/InstitutionProfile.aspx?unitId={{e.college.unitid}}'>link</a></strong>")
+          L.marker(['{{e.college.lat}}', '{{e.college.lon}}'],{title:'{{e.student.fname}} {{e.student.lname}} ({{e.college.name}})',icon:alumniIcon,forceZIndex:6000}).addTo(alumniLayerGroup).bindPopup("<strong>'{{e.student.fname}} {{e.student.lname}} {{e.grad_year}} ({{e.college.name}})'<br>{{e.college.city}},{{e.college.state}}<br><a href='https://nces.ed.gov/ipeds/datacenter/InstitutionProfile.aspx?unitId={{e.college.unitid}}'>link</a></strong>")
       {% endif %}
     {% endfor %}
 
@@ -367,6 +367,18 @@ var searchBar = L.control.pinSearch({
     searchBarHeight: '30px',
     maxSearchResults: 10
 }).addTo(map);
+
+(function(global){
+  var MarkerMixin = {
+    _updateZIndex: function (offset) {
+      this._icon.style.zIndex = this.options.forceZIndex ? (this.options.forceZIndex + (this.options.zIndexOffset || 0)) : (this._zIndex + offset);
+    },
+    setForceZIndex: function(forceZIndex) {
+      this.options.forceZIndex = forceZIndex ? forceZIndex : null;
+    }
+  };
+  if (global) global.include(MarkerMixin);
+})(L.Marker);
 
 </script>
 
