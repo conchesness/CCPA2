@@ -9,47 +9,75 @@ import requests
 # from pandas import read_csv
 import mongoengine.errors
 
-
-@app.route('/myprofile')
+@app.route('/findstudent', methods=["GET","POST"])
 @login_required
-def myProfile():
-    colleges = CollegeEnrollment.objects(student=current_user)
-    return render_template('profilemy.html',colleges=colleges)
+@require_role(role="teacher")
+def findstudent():
+    current_user
+    pass
 
-# This is the route for editing a profile
-# the methods part is required if you are using a form 
-@app.route('/myprofile/edit', methods=['GET','POST'])
-# This requires the user to be loggedin
+@app.route('/allstudents')
 @login_required
-# This is the function that goes with the route
-def profileEdit():
-    # This gets an object that is an instance of the form class from the forms.pyin classes
+@require_role(role="teacher")
+def allstudents():
+    studentObj = Role.objects.get(name="student")
+    students=User.objects(roles__contains = studentObj)
+    return render_template("students.html",students=students)
+
+@app.route('/profile')
+@app.route('/profile/<uid>')
+@login_required
+def profile(uid=None):
+    adminObj = Role.objects.get(name="admin")
+    if uid and adminObj in current_user.roles:
+        try:
+            user = User.objects.get(pk=uid)
+        except mongoengine.errors.DoesNotExist:
+            flash("That user doesn't exist.")
+            return render_template("index.html")
+    elif uid:
+        flash("You can only edit your own profile.")
+        return render_template("index.html")
+    else:
+        user = current_user
+    colleges = CollegeEnrollment.objects(student=user)
+    return render_template("profile.html",user=user,colleges=colleges)
+
+
+@app.route('/profile/edit',methods=['GET','POST'])
+@app.route('/profile/edit/<uid>', methods=['GET','POST'])
+@login_required
+def profileEdit(uid=None):
+    adminObj = Role.objects.get(name="admin")
     form = ProfileForm()
-    # This asks if the form was valid when it was submitted
+    if uid and adminObj in current_user.roles:
+        try:
+            user = User.objects.get(pk=uid)
+        except mongoengine.errors.DoesNotExist:
+            flash("That user account doesn't exist")
+            return redirect.url_for("index")
+    elif uid:
+        flash("You can't edit that user's profile.")
+        return redirect.url_for("index")
+    else:
+        user = current_user
     if form.validate_on_submit():
-        # if the form was valid then this gets an object that represents the currUser's data
-        currUser = User.objects.get(id=current_user.id)
-        # This updates the data on the user record that was collected from the form
-        currUser.update(
+        user.update(
             lname = form.lname.data,
             fname = form.fname.data,
         )
-        # This updates the profile image
         if form.image.data:
-            if currUser.image:
-                currUser.image.delete()
-            currUser.image.put(form.image.data, content_type = 'image/jpeg')
-            # This saves all the updates
-            currUser.save()
-        # Then sends the user to their profle page
-        return redirect(url_for('myProfile'))
+            if user.image:
+                user.image.delete()
+            user.image.put(form.image.data, content_type = 'image/jpeg')
 
-    # If the form was not submitted this prepopulates a few fields
-    # then sends the user to the page with the edit profile form
-    form.fname.data = current_user.fname
-    form.lname.data = current_user.lname
+            user.save()
+        return redirect(url_for('profile'))
 
-    return render_template('profileform.html', form=form)
+    form.fname.data = user.fname
+    form.lname.data = user.lname
+
+    return render_template('profileform.html', form=form, user=user)
 
 # @app.route("/checknames")
 # def checknames():

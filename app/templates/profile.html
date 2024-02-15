@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<h1 class="display-1">
+    My Profile
+    {% if user == current_user %}
+        <a href="/profile/edit">
+            <img width="40" src="/static/edit.png">
+        </a>
+    {% elif current_user.has_role("admin") %}
+        <a href="/profile/edit/{{user.id}}">
+            <img width="40" src="/static/edit.png">
+        </a>
+    {% endif %}
+</h1>
+
+<div class="row">
+    <div class="col-2">
+        {% if user.image %}
+            <img class="img-thumbnail img-fluid" src="data:image;base64,{{base64encode(user.image.read())}}"> <br>
+        {% else %}
+            <img class="img-thumbnail" width = "100" src="/static/lion.png">
+        {% endif %} 
+    </div>
+    <div class="col display-6">
+        {% if user.fname and user.lname %}
+            Name: {{user.fname}}  {{user.lname}} <br>
+        {% else %}
+            Google User Name: {{user.gname}} <br>
+        {% endif %}
+        Email: {{user.email}} <br> <br>
+        <h1 class="display-5">Roles:</h1> 
+        {% for role in user.roles %}
+        <ul>
+            <li>{{role.name.capitalize()}}</li>
+        </ul>
+        {% endfor %}
+        {#
+            <h3>Addresses <a href="/address/new" class="btn btn-primary btn-sm" role="button">New Address</a></h3>
+            {% for a in user.addresses %}
+                <a href="/address/delete/{{a.oid}}"><img width="40" src="static/delete.png"></a>
+                {{a.addresstype}} <br>
+                {{a.name}} <br>
+                {{a.streetAddress}} <br>
+                {{a.city}} {{a.state}} {{a.zipcode}} <br>
+            {% endfor %}
+        #} <br>
+        {% if user.grade == 12 or current_user.has_role("teacher") %}
+            <h3 class="display-5">Colleges 
+                {% if current_user == user %}
+                    <a href="/college/new" class="btn btn-primary btn-sm" role="button">
+                {% elif current_user.has_role("teacher") %}
+                    <a href="/college/new/{{user.id}}" class="btn btn-primary btn-sm" role="button">
+                {% endif %}
+                    New College
+                </a> 
+            </h3>
+            <ul>
+            {% for college in colleges %}
+                <li>
+                    <a href="/college/delete/{{college.id}}"><img width="40" src="/static/delete.png"><a> {{ college.college.name }} <br>
+                    Graduation Year: {{ college.grad_year }}
+                </li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</div>
+<br>
+
+
+
+{% endblock %}

@@ -84,7 +84,7 @@ def collegeNew(uid=None):
         user = User.objects.get(pk=uid)
     else:
         flash('You do not have the right role to add an address for a user that is not you.')
-        return redirect(url_for('myProfile'))
+        return redirect(url_for('profile'))
 
     form = CollegeForm()
 
@@ -99,7 +99,7 @@ def collegeNew(uid=None):
             student = user,
             grad_year = form.gradyear.data
         ).save()
-        return redirect(url_for('myProfile'))
+        return redirect(url_for('profile'))
 
     collegeNames=getCollegeNames()
         
@@ -116,9 +116,7 @@ def collegeEnrollmentDelete(ceid):
     else:
         flash('You do not have the right privleges to delete this college enrollment.')
     
-    return redirect(url_for('myProfile'))
-
-
+    return redirect(url_for('profile'))
 
 
 @app.route('/address/new/<uid>',methods=['GET','POST'])
@@ -131,7 +129,7 @@ def address_new(uid=None):
         user = User.objects.get(pk=uid)
     else:
         flash('You do not have the right role to add an address for a user that is not you.')
-        return redirect(url_for('myProfile'))
+        return redirect(url_for('profile'))
 
     form = AddressForm()
 
@@ -149,7 +147,7 @@ def address_new(uid=None):
         
         updateLatLon(address,user)
 
-        return redirect(url_for('myProfile'))
+        return redirect(url_for('profile'))
 
         
     return render_template('addresses/address_form.html',form=form,user=user)
@@ -163,12 +161,12 @@ def address_delete(aid,uid=None):
         user = User.objects.get(pk=uid)
     else:
         flash("You don't have the right role to delete another user's address.")
-        return redirect(url_for('myprofile'))
+        return redirect(url_for('profile'))
 
     user.addresses.filter(oid=aid).delete()
     user.save()
     
-    return redirect(url_for('myProfile'))
+    return redirect(url_for('profile'))
 
 
 # @app.route("/importcolleges")

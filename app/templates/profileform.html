@@ -32,8 +32,8 @@
 
         <p>
             {{ form.image.label }}<br>
-            {% if current_user.image %}
-                <img class="img-thumbnail" width="100" src="data:image;base64,{{base64encode(current_user.image.read())}}"> <br>
+            {% if user.image %}
+                <img class="img-thumbnail" width="100" src="data:image;base64,{{base64encode(user.image.read())}}"> <br>
             {% else %}
                 <img class="img-thumbnail" width = "100" src="/static/lion.png">
             {% endif %} <br>

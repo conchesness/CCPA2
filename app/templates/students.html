@@ -1,0 +1,24 @@
+<!-- This is a blank template.  You can copy this to make a new template page. -->
+
+{% extends 'base.html' %}
+
+{% block body %}
+{% set ns = namespace(grade=0) %}
+<div class="row">
+{% for s in students | sort(attribute="fname") | sort(attribute="lname") | sort(attribute="grade", reverse=true) %}
+    {% if ns.grade != s.grade %}
+    <div class="col-12">
+        {% set ns.grade = s.grade %}
+        <br>
+        <h2>{{ns.grade}}th Grade</h2>
+    </div>
+    {% endif %}
+    <div class="col-4">
+        <a href="/profile/{{s.id}}">
+            {{s.fname}} {{s.lname}} {{ s.grade }}
+        </a>
+    </div>
+{% endfor %}
+</div>
+
+{% endblock %}grade

@@ -228,6 +228,8 @@
     var map = L.map('map', {
         center: [37.7614926, -122.1929292],
         zoom: 12,
+        minZoom: 2,
+        zoomSnap: 0,
         layers: [base,otherLayerGroup,cccLayerGroup,ccLayerGroup,ucLayerGroup,csuLayerGroup,alumniLayerGroup,staffLayerGroup]
     });
 

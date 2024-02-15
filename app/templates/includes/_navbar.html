@@ -13,10 +13,17 @@
             <a class="nav-link" href="{{ url_for('login') }}">Login</a>
           </li>
         {% else %}
-          {% if session['isteacher'] %}
-            <li class="nav-item">
+        
+          {% if current_user.has_role("teacher") %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Staff Tools
+            </a>
+            <ul class="dropdown-menu">
               <a class="nav-link" href="/survey">Survey</a>
-            </li>
+              <a class="nav-link" href="/allstudents">All Students</a>
+            </ul>
+          </li>
           {% endif %}
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -53,7 +60,7 @@
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         {% if not current_user.is_anonymous %}
           <li class="nav-item">
-            <a class="nav-link" href="/myprofile">
+            <a class="nav-link" href="/profile">
               {{ current_user.gname }} 
             </a>
           </li>          

@@ -305,15 +305,15 @@ def teacherCourseAdd(teacherID,courseID=None):
 @login_required
 def teacherList(letter=None):
     teacherFirstLetters = set()
-    teacher = Role.objects.get(name__iexact="teacher")
-    allTeachers = User.objects(roles__contains=teacher)
+    teacherObj = Role.objects.get(name__iexact="teacher")
+    allTeachers = User.objects(roles__contains=teacherObj)
     for teacher in allTeachers:
         teacherFirstLetters.add(teacher.lname[0].upper())
     teacherFirstLetters = list(teacherFirstLetters)
     teacherFirstLetters.sort()
 
     if letter:
-        teachers = User.objects(role="Teacher",lname__istartswith=letter)
+        teachers = User.objects(roles__contains=teacherObj,lname__istartswith=letter)
     else:
         teachers=allTeachers
 
@@ -416,9 +416,9 @@ def srevdelete(srid):
     thisSRev = StudentReview.objects.get(id=srid)
     if current_user.isadmin or current_user == thisSRev.student:
         thisSRev.delete()
-        return redirect(url_for('myprofile'))
+        return redirect(url_for('profile'))
     flash("You can't delete this review.")
-    return redirect(url_for('myprofile'))
+    return redirect(url_for('profile'))
 
 @app.route('/studentreview/new/<tcid>', methods=['GET', 'POST'])
 @login_required
