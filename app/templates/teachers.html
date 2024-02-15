@@ -34,6 +34,9 @@
                 </div>
                 <div class="col">
                     <small>
+                        {% if teacher == current_user or current_user.has_role("admin") %}
+                            <a href="/profile/{{teacher.id}}">p</a>
+                        {% endif %}
                         {% if teacher.late_work %}lw{% endif %}
                         {% if teacher.feedback %}fb{% endif %}
                         {% if teacher.classcontrol %}cc{% endif %}

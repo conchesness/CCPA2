@@ -103,7 +103,7 @@ def collegeNew(uid=None):
 
     collegeNames=getCollegeNames()
         
-    return render_template('addresses/new_college_form.html',form=form, collegeNames=collegeNames)
+    return render_template('addresses/new_college_form.html',form=form, collegeNames=collegeNames, user=user)
 
 @app.route('/college/delete/<ceid>')
 def collegeEnrollmentDelete(ceid):

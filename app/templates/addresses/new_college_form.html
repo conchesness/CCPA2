@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block body %}
-        <h1>New College</h1>
+        <h1>New College for {{user.fname}} {{user.lname}}</h1>
 
         <form method=post>
             {{ form.hidden_tag() }}
