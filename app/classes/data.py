@@ -187,7 +187,7 @@ class ProjPost(Document):
     image_intention = FileField()
 
     meta = {
-        'ordering': ['-createDateTime']
+        'ordering': ['createDateTime']
     }
 
 

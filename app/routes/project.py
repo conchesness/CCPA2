@@ -98,6 +98,11 @@ def projectPostNew(pid=None,mid=None):
             milestoneOID = form.milestone.data
         )
 
+        if form.image_reflection.data:
+            # if newPost.image_reflection:
+            #     newPost.image_reflection.delete()
+            newPost.image_reflection.put(form.image_reflection.data, content_type = 'image/jpeg')
+
         newPost.save()
 
         return redirect(url_for("projectMy"))

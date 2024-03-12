@@ -32,7 +32,8 @@ copy this one and then edit it. -->
         <p class="text-danger"> Check fields below for errors.</p>
         {% endif %}
 
-        <form method=post>
+        <form method="post" enctype="multipart/form-data">
+
             {{ form.hidden_tag() }}
 
             <h3>Which Milestone are you working on</h3>
@@ -104,7 +105,7 @@ copy this one and then edit it. -->
         <script type="text/javascript">
             tinymce.init({
                 selector: 'textarea.tmce-editor',
-                plugins:'advlist autolink lists link image charmap print preview hr anchor pagebreak searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking save table contextmenu directionality emoticons template paste textcolor colorpicker textpattern imagetools',
+                plugins:'advlist autolink lists link image charmap print preview hr anchor pagebreak searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking save table directionality emoticons paste textpattern imagetools',
                 toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media | forecolor backcolor emoticons',
                 image_advtab: true
             });
