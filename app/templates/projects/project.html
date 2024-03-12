@@ -23,30 +23,57 @@
 <b>Product:</b> <br> {{proj.product|safe}} <br>
 
 {% if proj.milestones|length != 0 and not edit %}
-    <h3>Milestones</h3>
+    <h3>
+        Milestones
+        <a href="/project/milestone/new/{{proj.id}}"><img src="/static/new.png" width='40'></a>
+    </h3>
+    Milestones are major accomplishments along the way to completing your project.
+<br>
+
     {% for m in proj.milestones %}
-    {% if current_user == proj.owner %}
-        <a data-toggle="tooltip" data-placement="top" title="Edit Milestone" href="/project/milestone/edit/{{proj.id}}/{{m.oid}}"><img width='20' src="/static/edit.png"></a>
-        <a data-toggle="tooltip" data-placement="top" title="Delete Milestone" href="/project/milestone/delete/{{proj.id}}/{{m.oid}}"><img width='20' src="/static/delete.png"></a>
-        <a data-toggle="tooltip" data-placement="top" title="Mark Milestone as Complete" href="/project/milestone/reflection/{{proj.id}}/{{m.oid}}"><img width="30" src="/static/finish.png"></a>
-    {% endif %}
-        <br>
-        <h4>#{{m.number}}: {{m.name}}</h4>
-        <b>Status:</b> {{m.status}} <br>
-        <b>Description:</b><br>
-        {{m.desc|safe}}
-        {% if m.reflection %}
-            <b>Reflection:</b> <br>
-            {{m.reflection|safe}} <br>
+        {% if current_user == proj.owner %}
+            <a data-toggle="tooltip" data-placement="top" title="Edit Milestone" href="/project/milestone/edit/{{proj.id}}/{{m.oid}}"><img width='20' src="/static/edit.png"></a>
+            <a data-toggle="tooltip" data-placement="top" title="Delete Milestone" href="/project/milestone/delete/{{proj.id}}/{{m.oid}}"><img width='20' src="/static/delete.png"></a>
+            <a data-toggle="tooltip" data-placement="top" title="Mark Milestone as Complete" href="/project/milestone/reflection/{{proj.id}}/{{m.oid}}"><img width="30" src="/static/finish.png"></a>
         {% endif %}
-        <hr>
+            <br>
+            <h4>#{{m.number}}: {{m.name}}</h4>
+            <b>Status:</b> {{m.status}} <br>
+            <b>Description:</b><br>
+            {{m.desc|safe}}
+            {% if m.reflection %}
+                <b>Reflection:</b> <br>
+                {{m.reflection|safe}} <br>
+            {% endif %}
+            <hr>
+                <h5>Posts <a href="/project/post/new/{{proj.id}}/{{m.oid}}"><img src="/static/new.png" width="20"></a> </h5>
+                {% if m.posts %}
+                    {% for post in m.posts %}
+                        {% if post.post_type.lower() == 'intention' %}
+                            <div class="bg-primary text-light px-3 py-1">
+                        {% else %}
+                            <div class="bg-success text-light px-3 py-1">
+                        {% endif %}
+                        {{post.post_type}} {{moment(post.createDateTime).calendar()}} 
+                        <a href="/project/post/delete/{{post.id}}"><img src="/static/delete.png" width="20"></a>
+                        <br>
+                        {% if post.post_type.lower() == "intention" %}
+                            Confidence: {{post.confidence}} <br>
+                            Intention: {{post.intention | safe}}
+                        {% endif %}
+                        {% if post.post_type.lower() == "reflection" %}
+                            Satisfaction: {{post.satisfaction}} <br>
+                            Reflection: {{post.reflection | safe}}
+                        {% endif %}    
+                            </div>
+                    {% endfor %}
+                {% endif %}
+            <hr>
+            <hr>
     {% endfor %}
 {% endif %}
 
-<H3>What are Milestones?</H3>
-Milestones are major accomplishments along the way to completing your project.
-A project should have several milestones. A small project might only have two or three total milestones. We will create only one milestone at a time. 
-When you complete a milestone you will create another one until the last milestone which is the project completion. <br> <br>
+<br> <br>
 
 {% if proj.milestones|length == 0 %}
     No Milestones yet. <br>

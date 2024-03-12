@@ -127,13 +127,16 @@ class MilestoneForm(FlaskForm):
     status = SelectField('Status',choices=[('In Progress','In Progress'),('Done','Done'),('Delete','Delete')])
     name = StringField('Name')
     desc = TextAreaField('Description')
-    #reflection = TextAreaField('Reflection')
     submit = SubmitField('Save')
 
-class MilestoneRefForm(FlaskForm):
-    reflection = TextAreaField()
-    sat = SelectField('Satisfaction',choices=[(0,''),(5,'Proud'),(4,'Satisfied'),(3,"It's Fine"),(2,'Could have been better'),(1,'Yuck')])
-    submit = SubmitField('Save')
+class ProjPostForm(FlaskForm):
+    post_type = SelectField("Type", choices=[('','---'),('Intention','Intention'),('Reflection','Reflection')], validators=[DataRequired()])
+    confidence = SelectField("Confidence",choices=[(0,'---'),(3,"Very"),(2,'Sorta'),(1,'Not')])
+    satisfaction = SelectField("Satisfaction",choices=[(0,'---'),(3,"Very"),(2,'Sorta'),(1,'Not')])
+    reflection = TextAreaField("Reflection")
+    intention = TextAreaField("Intention")
+    milestone = SelectField("Milestone",choices=[],validate_choice=False)
+    submit = SubmitField("Save")
 
 class ObstacleForm(FlaskForm):
     name = StringField('Name')

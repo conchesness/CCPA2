@@ -171,6 +171,24 @@ class Project(Document):
     obstacles = EmbeddedDocumentListField('Obstacle')
     milestones = EmbeddedDocumentListField('Milestone')
 
+class ProjPost(Document):
+    owner = ReferenceField('User')
+    project = ReferenceField('Project')
+    milestoneOID = StringField()
+    createDateTime = DateTimeField(default=dt.datetime.utcnow())
+    # intention, reflection
+    post_type = StringField()
+    # 1-3
+    satisfaction = IntField()
+    confidence = IntField()
+    reflection = StringField()
+    intention = StringField()
+
+    meta = {
+        'ordering': ['-createDateTime']
+    }
+
+
 class Blog(Document):
     author = ReferenceField('User',reverse_delete_rule=CASCADE) 
     subject = StringField()
