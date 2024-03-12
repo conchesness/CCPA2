@@ -136,6 +136,7 @@ class ProjPostForm(FlaskForm):
     reflection = TextAreaField("Reflection")
     intention = TextAreaField("Intention")
     milestone = SelectField("Milestone",choices=[],validate_choice=False)
+    image_reflection = FileField("Image")
     submit = SubmitField("Save")
 
 class ObstacleForm(FlaskForm):
