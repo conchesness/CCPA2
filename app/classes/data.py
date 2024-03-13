@@ -183,8 +183,7 @@ class ProjPost(Document):
     confidence = IntField()
     reflection = StringField()
     intention = StringField()
-    image_reflection = FileField()
-    image_intention = FileField()
+    image_reflection_src = StringField()
 
     meta = {
         'ordering': ['createDateTime']

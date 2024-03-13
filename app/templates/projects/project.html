@@ -64,9 +64,10 @@
                         {% if post.post_type.lower() == "reflection" %}
                             Satisfaction: {{post.satisfaction}} <br>
                             Reflection: {{post.reflection | safe}}
-                            {% if post.image_reflection %}
-                                <img class="img-thumbnail img-fluid" src="data:image;base64,{{base64encode(post.image_reflection.read())}}"> <br>
-                            {% endif %} 
+                            {% if post.image_reflection_src %}
+                                {# <img class="img-thumbnail img-fluid" src="data:image;base64,{{base64encode(post.image_reflection.read())}}"> <br> #}
+                                <img src="{{post.image_reflection_src}}">
+                                {% endif %} 
                         {% endif %}    
                             </div>
                     {% endfor %}

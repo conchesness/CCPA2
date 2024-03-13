@@ -69,7 +69,7 @@ copy this one and then edit it. -->
                     {% endfor %}
                 </p> 
             </div>
-            <div class="reflection">
+            <div class="reflection pb-3">
                 <h3>Are you satisfied with your work today?</h3>
                 {{ form.satisfaction(class='form-control') }}</b>              
                 <p class="text-danger">
@@ -88,12 +88,22 @@ copy this one and then edit it. -->
 
                 <h3>Want to include an image?</h3>
                 this doesn't work yet... <br>
-                {{ form.image_reflection(class='tmce-editor') }}</b>  
+                {{ form.image_reflection(id="image-input") }}</b>  
                 <p class="text-danger">
                     {% for error in form.image_reflection.errors %}
                         {{error}}
                     {% endfor %}
                 </p> 
+                <!--src tag is added by the javascript below-->
+                <img id="preview"></img> <br><br><br>
+                {{ form.image_reflection_src(id="image-save") }}</b>  
+                <p class="text-danger">
+                    {% for error in form.image_reflection.errors %}
+                        {{error}}
+                    {% endfor %}
+                </p> 
+
+                <br><br><br>
             </div>
 
 
@@ -105,7 +115,7 @@ copy this one and then edit it. -->
         <script type="text/javascript">
             tinymce.init({
                 selector: 'textarea.tmce-editor',
-                plugins:'advlist autolink lists link image charmap print preview hr anchor pagebreak searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking save table directionality emoticons paste textpattern imagetools',
+                plugins:'advlist autolink lists link image charmap preview anchor pagebreak searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking save table directionality emoticons',
                 toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media | forecolor backcolor emoticons',
                 image_advtab: true
             });
@@ -130,7 +140,6 @@ copy this one and then edit it. -->
             function int_ref() {
 
                 var postTypeValue = document.getElementById("postType").value;
-                console.log(postTypeValue)
                 if (postTypeValue == 'Reflection') {
                     $('.intention').hide();
                     $('.reflection').show(); 
@@ -140,6 +149,63 @@ copy this one and then edit it. -->
                 }
             };
         </script>
+
+        <script  type="text/javascript">
+            let imgInput = document.getElementById('image-input');
+            var MAX_WIDTH = 400;
+            var MAX_HEIGHT = 400;
+
+            imgInput.addEventListener('change', function (e) {
+                if (e.target.files) {
+                    let imageFile = e.target.files[0];
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var img = document.createElement("img");
+
+                        img.onload = function (event) {
+                            // Dynamically create a canvas element
+                            var canvas = document.createElement("canvas");
+
+                            // var canvas = document.getElementById("canvas");
+                            var ctx = canvas.getContext("2d");
+
+                            var width = img.width;
+                            var height = img.height;
+
+                            // Change the resizing logic
+                            if (width > height) {
+                                if (width > MAX_WIDTH) {
+                                    height = height * (MAX_WIDTH / width);
+                                    width = MAX_WIDTH;
+                                }
+                            } else {
+                                if (height > MAX_HEIGHT) {
+                                    width = width * (MAX_HEIGHT / height);
+                                    height = MAX_HEIGHT;
+                                }
+                            }
+
+
+                            canvas.width = width
+                            canvas.height = height
+
+                            // Actual resizing
+                            ctx.drawImage(img, 0, 0, width, height);
+                            console.log(width,height)
+
+
+                            // Show resized image in preview element
+                            var dataurl = canvas.toDataURL(imageFile.type);
+                            document.getElementById("preview").src = dataurl;
+                            document.getElementById("image-save").value = dataurl; 
+                        }
+                        img.src = e.target.result;
+                    }
+                    reader.readAsDataURL(imageFile);
+                }
+            });
+        </script>
+  
 
         {% endblock %}
         

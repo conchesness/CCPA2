@@ -95,13 +95,14 @@ def projectPostNew(pid=None,mid=None):
             reflection = form.reflection.data,
             owner = current_user,
             project = project,
-            milestoneOID = form.milestone.data
+            milestoneOID = form.milestone.data,
+            image_reflection_src = form.image_reflection_src.data
         )
 
-        if form.image_reflection.data:
-            # if newPost.image_reflection:
-            #     newPost.image_reflection.delete()
-            newPost.image_reflection.put(form.image_reflection.data, content_type = 'image/jpeg')
+        # if form.image_reflection.data:
+        #     # if newPost.image_reflection:
+        #     #     newPost.image_reflection.delete()
+        #     newPost.image_reflection.put(form.image_reflection.data, content_type = 'image/jpeg')
 
         newPost.save()
 

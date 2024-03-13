@@ -6,7 +6,7 @@ from flask_wtf import FlaskForm
 import mongoengine.errors
 from wtforms.validators import URL, Email, DataRequired, Optional, InputRequired
 from wtforms import StringField, SubmitField, TextAreaField, IntegerField, SelectField, FileField
-from wtforms import BooleanField, URLField, ColorField, IntegerRangeField, DateTimeLocalField
+from wtforms import BooleanField, URLField, ColorField, IntegerRangeField, DateTimeLocalField, HiddenField
 
 class QRForm(FlaskForm):
     QRText = StringField()
@@ -137,6 +137,7 @@ class ProjPostForm(FlaskForm):
     intention = TextAreaField("Intention")
     milestone = SelectField("Milestone",choices=[],validate_choice=False)
     image_reflection = FileField("Image")
+    image_reflection_src = StringField()
     submit = SubmitField("Save")
 
 class ObstacleForm(FlaskForm):
